@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.sunnymarketbackend.dao.ProductDao">
+  <!-- 新增產品 -->
+    <insert id="addProduct" parameterType="com.example.sunnymarketbackend.entity.Product" useGeneratedKeys="true" keyProperty="productId">
+        INSERT INTO product_table (category, product_Name, image_Url, price, stock,description)
+        VALUES (#{category}, #{productName}, #{imageUrl}, #{price}, #{stock}, #{description});
+    </insert>
+  <!-- 查詢單筆產品 -->
+    <select id="getProductById" resultType="com.example.sunnymarketbackend.entity.Product">
+        SELECT product_name FROM product_table WHERE product_id = #{productId}
+    </select>
+  
+</mapper>
