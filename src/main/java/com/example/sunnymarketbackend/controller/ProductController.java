@@ -17,7 +17,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @PostMapping("/createProduct") // 新增商品
+    @PostMapping("/addProduct") // 新增商品
     public ResponseEntity<Product> addProduct(@RequestBody @Valid ProductRequest productRequest) {
         Long productId = productService.addProduct(productRequest);
         Product product = productService.getProductById(productId);
@@ -34,7 +34,7 @@ public class ProductController {
         if (product != null) {
             return ResponseEntity.ok(product);
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }
