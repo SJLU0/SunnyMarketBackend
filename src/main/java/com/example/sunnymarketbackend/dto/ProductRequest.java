@@ -21,7 +21,7 @@ public class ProductRequest {
     @NotNull
     private Integer stock;
 
-    @NotNull
+    @NotBlank
     private String description;
 
     public ProductCategory getCategory() {
