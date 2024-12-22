@@ -3,6 +3,7 @@ package com.example.sunnymarketbackend.entity;
 import com.example.sunnymarketbackend.constant.ProductCategory;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Product {
 
@@ -20,9 +21,9 @@ public class Product {
 
     private String description;
 
-    private LocalDate createdDate;
+    private LocalDateTime  createdDate;
 
-    private LocalDate lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 
     public Long getProductId() {
         return productId;
@@ -80,19 +81,19 @@ public class Product {
         this.description = description;
     }
 
-    public LocalDate getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDate createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
-    public LocalDate getLastModifiedDate() {
+    public LocalDateTime getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(LocalDate lastModifiedDate) {
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
 }
