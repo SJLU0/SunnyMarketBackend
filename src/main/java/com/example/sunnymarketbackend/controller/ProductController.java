@@ -1,6 +1,7 @@
 package com.example.sunnymarketbackend.controller;
 
 import com.example.sunnymarketbackend.dto.ProductRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping("/createProduct") // 新增商品
-    public ResponseEntity<Product> addProduct(@RequestBody ProductRequest productRequest) {
+    public ResponseEntity<Product> addProduct(@RequestBody @Valid ProductRequest productRequest) {
         Long productId = productService.addProduct(productRequest);
         Product product = productService.getProductById(productId);
         if (product != null) {
@@ -27,7 +28,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/getProductById/{productId}")
+    @GetMapping("/{productId}")
     public ResponseEntity<Product> getProductById (@PathVariable Long productId) {
         Product product = productService.getProductById(productId);
         if (product != null) {
