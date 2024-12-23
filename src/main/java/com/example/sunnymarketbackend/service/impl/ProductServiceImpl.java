@@ -1,8 +1,12 @@
 package com.example.sunnymarketbackend.service.impl;
 
+import com.example.sunnymarketbackend.constant.ProductCategory;
 import com.example.sunnymarketbackend.dto.ProductRequest;
 
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +21,25 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductDao productDao;
+
+    @Override
+    public PageInfo<Product> getAllProductsWithPaginationNew(Integer pageNum, Integer pageSize, ProductCategory category) {
+        // 使用 PageHelper 啟動分頁
+        PageHelper.startPage(pageNum, pageSize);
+
+        // 根據是否有 category 決定查詢邏輯
+        Page<Product> productList;
+        if (category == null) {
+            // 無類別時查詢所有產品
+            productList = productDao.selectAllProducts();
+        } else {
+            // 按類別查詢，傳遞 ProductCategory 枚舉
+            productList = productDao.selectProductsByCategory(category);
+        }
+
+        // 封裝為 PageInfo 對象返回
+        return new PageInfo<>(productList);
+    }
 
     @Override
     public Long addProduct(ProductRequest productRequest) {
