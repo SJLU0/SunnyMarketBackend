@@ -1,6 +1,8 @@
 package com.example.sunnymarketbackend.controller;
 
+import com.example.sunnymarketbackend.constant.ProductCategory;
 import com.example.sunnymarketbackend.dto.ProductRequest;
+import com.github.pagehelper.PageInfo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,15 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @GetMapping("/newPaage")
+    public ResponseEntity<PageInfo<Product>> getAllProductsWithPagination(
+            @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+            @RequestParam(value = "category", required = false) ProductCategory category) {
+        PageInfo<Product> productList = productService.getAllProductsWithPaginationNew(pageNum, pageSize, category);
+        return ResponseEntity.ok(productList);
+    }
 
     @PostMapping("/addProduct") // 新增商品
     public ResponseEntity<Product> addProduct(@RequestBody @Valid ProductRequest productRequest) {
