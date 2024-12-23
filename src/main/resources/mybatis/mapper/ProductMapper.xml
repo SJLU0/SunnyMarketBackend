@@ -10,7 +10,23 @@
 
   <!-- 查詢單筆產品 -->
     <select id="getProductById" resultType="com.example.sunnymarketbackend.entity.Product">
-        SELECT product_id, product_name, category, image_Url, price, stock, description, created_date, last_modified_date FROM product_table WHERE product_id = #{productId}
+        SELECT product_id, product_name, category, image_Url, price, stock, description, created_date, last_modified_date
+        FROM product_table
+        WHERE product_id = #{productId}
     </select>
-  
+
+  <!-- 修改單筆產品 -->
+    <update id="updateProduct" parameterType="com.example.sunnymarketbackend.entity.Product">
+        UPDATE product_table 
+        SET category = #{category}, product_name = #{productName}, image_url = #{imageUrl},
+        price = #{price}, stock = #{stock}, description = #{description}, last_modified_date = #{lastModifiedDate}
+        WHERE product_id = #{productId}
+    </update>
+
+    <!-- 刪除單筆產品 -->
+    <delete id="deleteProductById" parameterType="com.example.sunnymarketbackend.entity.Product">
+        DELETE FROM product_table
+        WHERE product_id = #{productId}
+    </delete>
+
 </mapper>

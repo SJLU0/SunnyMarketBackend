@@ -1,6 +1,8 @@
 package com.example.sunnymarketbackend.service.impl;
 
 import com.example.sunnymarketbackend.dto.ProductRequest;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +10,6 @@ import com.example.sunnymarketbackend.dao.ProductDao;
 import com.example.sunnymarketbackend.entity.Product;
 import com.example.sunnymarketbackend.service.ProductService;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -38,4 +39,30 @@ public class ProductServiceImpl implements ProductService {
         return productDao.getProductById(productId);
     }
 
+    @Override
+    public void updateProduct(Long productId, ProductRequest productRequest) {
+
+        //更新產品資料
+        Product existingProduct = new Product();
+
+        existingProduct.setProductId(productId);
+        existingProduct.setCategory(productRequest.getCategory());
+        existingProduct.setProductName(productRequest.getProductName());
+        existingProduct.setImageUrl(productRequest.getImageUrl());
+        existingProduct.setPrice(productRequest.getPrice());
+        existingProduct.setStock(productRequest.getStock());
+        existingProduct.setDescription(productRequest.getDescription());
+        existingProduct.setLastModifiedDate(LocalDateTime.now());
+
+        int result = productDao.updateProduct(existingProduct);
+
+        if(result == 0){
+            throw new RuntimeException("Failed to update product: " + productId);
+        }
+    }
+
+    @Override
+    public void deleteProductById(Long productId) {
+        productDao.deleteProductById(productId);
+    }
 }
