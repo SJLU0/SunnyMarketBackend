@@ -8,6 +8,9 @@ import com.example.sunnymarketbackend.dao.ProductDao;
 import com.example.sunnymarketbackend.entity.Product;
 import com.example.sunnymarketbackend.service.ProductService;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -23,6 +26,8 @@ public class ProductServiceImpl implements ProductService {
         newProduct.setStock(productRequest.getStock());
         newProduct.setDescription(productRequest.getDescription());
         newProduct.setImageUrl(productRequest.getImageUrl());
+        newProduct.setCreatedDate(LocalDateTime.now());
+        newProduct.setLastModifiedDate(LocalDateTime.now());
         productDao.addProduct(newProduct);
 
         return newProduct.getProductId();
