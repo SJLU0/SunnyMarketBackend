@@ -41,19 +41,25 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-    // @PutMapping("updateProduct/{productId}")
-    // public ResponseEntity<Product> updateProduct (@PathVariable Long productId, @RequestBody ProductRequest productRequest){
-        
-    //     //檢查product 是否存在
-    //     Product product = productService.getProductById(productId);
-    //     if(product == null){
-    //         return ResponseEntity.notFound().build();
-    //     }
-    //     // 修改商品的數據
-    //     productService.updateProduct( productId, productRequest);
-    //     // 取得更新後的商品資訊
-    //     Product updateProduct = productService.getProductById(productId);
-    //     return ResponseEntity.status(HttpStatus.OK).body(updateProduct);
-    // }
+    @PutMapping("updateProduct/{productId}")
+    public ResponseEntity<Product> updateProduct (@PathVariable Long productId,
+                                                  @RequestBody ProductRequest productRequest){
+        //檢查 product 是否存在
+        Product product = productService.getProductById(productId);
+        if(product == null){
+            return ResponseEntity.notFound().build();
+        }
+        // 修改商品的數據
+        productService.updateProduct(productId, productRequest);
+        // 取得更新後的商品資訊
+        Product updateProduct = productService.getProductById(productId);
+        return ResponseEntity.status(HttpStatus.OK).body(updateProduct);
+    }
 
+    @DeleteMapping("deleteProduct/{productId}")
+    public ResponseEntity<?> deleteProductById (@PathVariable Long productId){
+        // 刪除商品
+        productService.deleteProductById(productId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
