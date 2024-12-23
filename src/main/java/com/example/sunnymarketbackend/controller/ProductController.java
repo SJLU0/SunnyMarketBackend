@@ -9,6 +9,10 @@ import org.springframework.http.ResponseEntity;
 import com.example.sunnymarketbackend.entity.Product;
 import com.example.sunnymarketbackend.service.ProductService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @RestController
 @RequestMapping("/api/products")
@@ -37,4 +41,19 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+    // @PutMapping("updateProduct/{productId}")
+    // public ResponseEntity<Product> updateProduct (@PathVariable Long productId, @RequestBody ProductRequest productRequest){
+        
+    //     //檢查product 是否存在
+    //     Product product = productService.getProductById(productId);
+    //     if(product == null){
+    //         return ResponseEntity.notFound().build();
+    //     }
+    //     // 修改商品的數據
+    //     productService.updateProduct( productId, productRequest);
+    //     // 取得更新後的商品資訊
+    //     Product updateProduct = productService.getProductById(productId);
+    //     return ResponseEntity.status(HttpStatus.OK).body(updateProduct);
+    // }
+
 }

@@ -11,4 +11,7 @@ public interface ProductDao extends BaseMapper<Product> {
     Long addProduct(Product product);
 
     Product getProductById(Long productId);
+
+    // int updateProduct(Product product);
+
 }

@@ -9,4 +9,6 @@ public interface ProductService {
 
     Product getProductById(Long productId);
 
+    // void updateProduct(Long productId, ProductRequest productRequest);
+
 }
