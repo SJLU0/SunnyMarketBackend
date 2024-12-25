@@ -23,14 +23,14 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao;
 
     @Override
-    public PageInfo<Product> getAllProductsWithPaginationNew(Integer pageNum,
+    public PageInfo<Product> selectAllProducts(Integer pageNum,
                                                              Integer pageSize,
                                                              ProductCategory category,
                                                              String sort,
                                                              String order) {
         PageHelper.startPage(pageNum, pageSize);
 
-        Page<Product> productList = productDao.selectAllProducts(category, order, sort);
+        Page<Product> productList = productDao.selectAllProducts(category, sort, order);
 
         return new PageInfo<>(productList);
     }
