@@ -12,28 +12,8 @@
             </if>
         </where>
         ORDER BY
-        <choose>
-            <when test="sort == 'price'">
-                price
-            </when>
-            <when test="sort == 'createDate'">
-                created_date
-            </when>
-            <otherwise>
-                created_date
-            </otherwise>
-        </choose>
-        <choose>
-            <when test="order == 'ASC'">
-                ASC
-            </when>
-            <when test="order == 'DESC'">
-                DESC
-            </when>
-            <otherwise>
-                DESC
-            </otherwise>
-        </choose>
+        ${sort != null and (sort == 'price' or sort == 'created_date') ? sort : 'created_date'}
+        ${order != null and (order == 'ASC' or order == 'DESC') ? order : 'DESC'}
     </select>
 
   <!-- 新增產品 -->
