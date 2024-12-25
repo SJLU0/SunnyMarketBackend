@@ -66,6 +66,12 @@
 				<optional>true</optional>
 			</dependency>
 
+<!--			驗證參數-->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-validation</artifactId>
+			</dependency>
+
 		</dependencies>
 
 	<build>

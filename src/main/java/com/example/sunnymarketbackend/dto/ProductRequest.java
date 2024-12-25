@@ -1,19 +1,27 @@
 package com.example.sunnymarketbackend.dto;
 
 import com.example.sunnymarketbackend.constant.ProductCategory;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class ProductRequest {
 
+    @NotNull
     private ProductCategory category;
 
+    @NotBlank
     private String productName;
 
+    @NotBlank
     private String imageUrl;
 
+    @NotNull
     private Integer price;
 
+    @NotNull
     private Integer stock;
 
+    @NotBlank
     private String description;
 
     public ProductCategory getCategory() {
