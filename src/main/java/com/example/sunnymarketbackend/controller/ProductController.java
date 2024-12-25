@@ -23,12 +23,14 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/Paage")
-    public ResponseEntity<PageInfo<Product>> getAllProductsWithPagination(
+    @GetMapping("/getAllProducts")
+    public ResponseEntity<PageInfo<Product>> getAllProducts(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
-            @RequestParam(value = "category", required = false) ProductCategory category) {
-        PageInfo<Product> productList = productService.getAllProductsWithPaginationNew(pageNum, pageSize, category);
+            @RequestParam(value = "category", required = false) ProductCategory category,
+            @RequestParam(value = "sort", defaultValue = "createDate") String sort,
+            @RequestParam(value = "order", defaultValue = "ASC") String order) {
+        PageInfo<Product> productList = productService.getAllProductsWithPaginationNew(pageNum, pageSize, category, sort, order);
         return ResponseEntity.ok(productList);
     }
 
@@ -52,6 +54,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
     @PutMapping("updateProduct/{productId}")
     public ResponseEntity<Product> updateProduct (@PathVariable Long productId,
                                                   @RequestBody ProductRequest productRequest){

@@ -6,19 +6,15 @@ import com.example.sunnymarketbackend.entity.Product;
 
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
 
 
 @Mapper
 public interface ProductDao extends BaseMapper<Product> {
 
     // 所有產品分頁
-    @Select("SELECT * FROM product_table")
-    Page<Product> selectAllProducts();
-
-    // Category 分頁
-    @Select("SELECT * FROM product_table WHERE category = #{category}")
-    Page<Product> selectProductsByCategory(ProductCategory category);
+    Page<Product> selectAllProducts(ProductCategory category,
+                                    String sort,
+                                    String order);
 
     Long addProduct(Product product);
 

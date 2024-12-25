@@ -7,7 +7,11 @@ import com.github.pagehelper.PageInfo;
 
 public interface ProductService {
 
-    PageInfo<Product> getAllProductsWithPaginationNew(Integer pageNum, Integer pageSize, ProductCategory category);
+    PageInfo<Product> getAllProductsWithPaginationNew(Integer pageNum,
+                                                      Integer pageSize,
+                                                      ProductCategory category,
+                                                      String sort,
+                                                      String order);
 
     Long addProduct(ProductRequest productRequest);
 
