@@ -23,21 +23,15 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao;
 
     @Override
-    public PageInfo<Product> getAllProductsWithPaginationNew(Integer pageNum, Integer pageSize, ProductCategory category) {
-        // 使用 PageHelper 啟動分頁
+    public PageInfo<Product> getAllProductsWithPaginationNew(Integer pageNum,
+                                                             Integer pageSize,
+                                                             ProductCategory category,
+                                                             String sort,
+                                                             String order) {
         PageHelper.startPage(pageNum, pageSize);
 
-        // 根據是否有 category 決定查詢邏輯
-        Page<Product> productList;
-        if (category == null) {
-            // 無類別時查詢所有產品
-            productList = productDao.selectAllProducts();
-        } else {
-            // 按類別查詢，傳遞 ProductCategory 枚舉
-            productList = productDao.selectProductsByCategory(category);
-        }
+        Page<Product> productList = productDao.selectAllProducts(category, order, sort);
 
-        // 封裝為 PageInfo 對象返回
         return new PageInfo<>(productList);
     }
 

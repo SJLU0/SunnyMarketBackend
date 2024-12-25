@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 
 public enum ProductCategory {
     FOOD("FOOD"),
-    SEA_FOOD("SEA_FOOD");
+    SEAFOOD("SEAFOOD");
 
     @EnumValue //給MyBatis Plus 映射到資料庫
     private final String category;
