@@ -23,12 +23,15 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/Page")
-    public ResponseEntity<PageInfo<Product>> getAllProductsWithPagination(
+    @GetMapping("/getAllProducts")
+    public ResponseEntity<PageInfo<Product>> getAllProducts(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-            @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-            @RequestParam(value = "category", required = false) ProductCategory category) {
-        PageInfo<Product> productList = productService.getAllProductsWithPaginationNew(pageNum, pageSize, category);
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+            @RequestParam(value = "category", required = false) ProductCategory category,
+            @RequestParam(value = "sort", defaultValue = "createDate") String sort,
+            @RequestParam(value = "order", defaultValue = "ASC") String order) {
+        PageInfo<Product> productList = productService.getAllProductsWithPaginationNew(pageNum, pageSize, category,
+                sort, order);
         return ResponseEntity.ok(productList);
     }
 
