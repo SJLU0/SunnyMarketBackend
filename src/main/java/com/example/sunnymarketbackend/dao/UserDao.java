@@ -5,9 +5,9 @@ import com.example.sunnymarketbackend.entity.User;
 
 public interface UserDao {
 
-    User getUserById(Integer userId);
+    User getUserById(Long userId);
 
     User getUserByEmail(String email);
 
-    Integer createUser(UserRegisterRequest userRegisterRequest);
+    Long createUser(UserRegisterRequest userRegisterRequest);
 }
