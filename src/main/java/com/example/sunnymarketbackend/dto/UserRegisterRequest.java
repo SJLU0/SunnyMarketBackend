@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public class UserRegisterRequest {
 
     @Email
+    @NotBlank
     private String email;
 
     @NotBlank
