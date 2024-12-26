@@ -8,10 +8,10 @@ import com.github.pagehelper.PageInfo;
 public interface ProductService {
 
     PageInfo<Product> selectAllProducts(Integer pageNum,
-                                                      Integer pageSize,
-                                                      ProductCategory category,
-                                                      String sort,
-                                                      String order);
+            Integer pageSize,
+            ProductCategory category,
+            String sort,
+            String order);
 
     Long addProduct(ProductRequest productRequest);
 
