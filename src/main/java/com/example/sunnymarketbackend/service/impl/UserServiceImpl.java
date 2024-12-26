@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public Integer register(UserRegisterRequest userRegisterRequest) {
+    public Long register(UserRegisterRequest userRegisterRequest) {
         //檢查註冊 email
         User user = userDao.getUserByEmail(userRegisterRequest.getEmail());
         if(user != null){
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(Integer userId) {
+    public User getUserById(Long userId) {
         return userDao.getUserById(userId);
     }
 

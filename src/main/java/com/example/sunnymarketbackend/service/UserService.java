@@ -6,9 +6,9 @@ import com.example.sunnymarketbackend.entity.User;
 
 public interface UserService {
 
-    User getUserById(Integer userId);
+    User getUserById(Long userId);
 
-    Integer register(UserRegisterRequest userRegisterRequest);
+    Long register(UserRegisterRequest userRegisterRequest);
 
     User login(UserLoginRequest userLoginRequest);
 }
