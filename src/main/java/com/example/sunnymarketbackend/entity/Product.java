@@ -2,7 +2,6 @@ package com.example.sunnymarketbackend.entity;
 
 import com.example.sunnymarketbackend.constant.ProductCategory;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Product {
@@ -21,7 +20,7 @@ public class Product {
 
     private String description;
 
-    private LocalDateTime  createdDate;
+    private LocalDateTime createdDate;
 
     private LocalDateTime lastModifiedDate;
 
