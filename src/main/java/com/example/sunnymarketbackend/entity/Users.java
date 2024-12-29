@@ -3,15 +3,15 @@ package com.example.sunnymarketbackend.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class User {
+public class Users {
 
-    private Integer userId;
+    private Long userId;
 
     private String email;
 
     private String password;
 
-    private String userName;
+    private String username;
 
     private String address;
 
@@ -23,15 +23,15 @@ public class User {
 
     private LocalDateTime lastModifiedDate;
 
-    private String reset_token;
+    private String resetToken;
 
-    private LocalDateTime reset_token_expiration;
+    private LocalDateTime resetTokenExpiration;
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -59,12 +59,12 @@ public class User {
         this.address = address;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPhoneNumber() {
@@ -99,19 +99,19 @@ public class User {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public String getReset_token() {
-        return reset_token;
+    public String getResetToken() {
+        return resetToken;
     }
 
-    public void setReset_token(String reset_token) {
-        this.reset_token = reset_token;
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
     }
 
-    public LocalDateTime getReset_token_expiration() {
-        return reset_token_expiration;
+    public LocalDateTime getResetTokenExpiration() {
+        return resetTokenExpiration;
     }
 
-    public void setReset_token_expiration(LocalDateTime reset_token_expiration) {
-        this.reset_token_expiration = reset_token_expiration;
+    public void setResetTokenExpiration(LocalDateTime resetTokenExpiration) {
+        this.resetTokenExpiration = resetTokenExpiration;
     }
 }

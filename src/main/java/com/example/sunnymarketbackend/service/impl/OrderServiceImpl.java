@@ -23,7 +23,7 @@ import com.example.sunnymarketbackend.dto.OrderRequest;
 import com.example.sunnymarketbackend.entity.Order;
 import com.example.sunnymarketbackend.entity.OrderItem;
 import com.example.sunnymarketbackend.entity.Product;
-import com.example.sunnymarketbackend.entity.User;
+import com.example.sunnymarketbackend.entity.Users;
 import com.example.sunnymarketbackend.service.OrderService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -70,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Long createOrder(Long userId, OrderRequest orderRequest) {
        //檢查 User 是否存在
-        User user = userDao.getUserById(userId);
+        Users user = userDao.getUserById(userId);
         if (user == null) {
             log.warn("User not found: {}", userId);
             throw new RuntimeException("User not found");

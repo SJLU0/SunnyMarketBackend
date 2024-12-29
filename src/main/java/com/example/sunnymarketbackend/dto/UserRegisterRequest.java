@@ -16,7 +16,7 @@ public class UserRegisterRequest {
     private String password;
 
     @NotBlank
-    private String userName;
+    private String username;
 
     @NotBlank
     private String address;
@@ -43,12 +43,12 @@ public class UserRegisterRequest {
         this.password = password;
     }
 
-    public String getUserName() {
-        return userName;
+    public @NotBlank String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(@NotBlank String username) {
+        this.username = username;
     }
 
     public String getAddress() {
@@ -74,4 +74,6 @@ public class UserRegisterRequest {
     public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
+
+
 }
