@@ -7,6 +7,8 @@ import com.example.sunnymarketbackend.entity.Product;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.time.LocalDateTime;
+
 @Mapper
 public interface ProductDao extends BaseMapper<Product> {
 
@@ -14,6 +16,8 @@ public interface ProductDao extends BaseMapper<Product> {
     Page<Product> selectAllProducts(ProductCategory category,
             String sort,
             String order);
+
+    void updateStock(Long productId, Integer stock, LocalDateTime lastModifiedDate);
 
     Long addProduct(Product product);
 
