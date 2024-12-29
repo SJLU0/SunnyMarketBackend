@@ -1,13 +1,22 @@
 package com.example.sunnymarketbackend.dao;
 
 import com.example.sunnymarketbackend.dto.UserRegisterRequest;
-import com.example.sunnymarketbackend.entity.User;
+import com.example.sunnymarketbackend.entity.Role;
+import com.example.sunnymarketbackend.entity.Users;
+
+import java.util.List;
 
 public interface UserDao {
 
-    User getUserById(Long userId);
+    Users getUserById(Long userId);
 
-    User getUserByEmail(String email);
+    Users getUserByEmail(String email);
 
-    Long createUser(UserRegisterRequest userRegisterRequest);
+    Long createUser(Users users);
+
+    // 權限相關
+    List<Role> getRoleByUserId(Long userId);
+
+    //新增註冊帳號的預設權限
+    void addRoleForUserId(Long userId, Long roleId);
 }

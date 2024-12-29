@@ -2,23 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.sunnymarketbackend.dao.UserDao">
     <!--從 id 取得 user-->
-    <select id="getUserById" resultType="com.example.sunnymarketbackend.entity.User">
-        SELECT user_id, email, password, user_name, address, phone_number, birthday, created_date, last_modified_date, reset_token, reset_token_expiration
+    <select id="getUserById" resultType="com.example.sunnymarketbackend.entity.Users">
+        SELECT user_id, email, password, username, address, phone_number, birthday, created_date, last_modified_date, reset_token, reset_token_expiration
         FROM user_profile
         WHERE user_id = #{userId}
     </select>
 
+    <!--從 id 取得 user 中的 Role-->
+    <select id="getUserByUserId" resultType="com.example.sunnymarketbackend.entity.Users">
+        SELECT role.role_id, role.role_name FROM role
+        JOIN user_has_role ON role.role_id = user_has_role.role_id
+        WHERE user_has_role.user_id = #{userId}
+    </select>
+
+    <!--新增註冊帳號的預設權限-->
+    <insert id="addRoleForUserId" parameterType="com.example.sunnymarketbackend.entity.Users" useGeneratedKeys="true">
+        INSERT INTO user_has_role (user_id, role_id)
+        VALUES (#{userId}, #{roleId})
+    </insert>
+
     <!--從 email 取得 user-->
-    <select id="getUserByEmail" resultType="com.example.sunnymarketbackend.entity.User">
-        SELECT user_id, email, password, user_name, address, phone_number, birthday, created_date, last_modified_date, reset_token, reset_token_expiration
+    <select id="getUserByEmail" resultType="com.example.sunnymarketbackend.entity.Users">
+        SELECT user_id, email, password, username, address, phone_number, birthday, created_date, last_modified_date, reset_token, reset_token_expiration
         FROM user_profile
         WHERE email = #{email}
     </select>
 
     <!--註冊-->
-    <insert id="createUser" parameterType="com.example.sunnymarketbackend.entity.User" useGeneratedKeys="true" keyProperty="productId">
-        INSERT INTO user_profile (email, password, user_name, address, phone_number, birthday, created_date, last_modified_date, reset_token, reset_token_expiration)
-        VALUES (#{email}, #{password}, #{user_name}, #{address}, #{phone_number}, #{birthday}, #{created_date}, #{last_modified_date}, #{reset_token}, #{reset_token_expiration})
+    <insert id="createUser" parameterType="com.example.sunnymarketbackend.entity.Users" useGeneratedKeys="true" keyProperty="userId">
+        INSERT INTO user_profile (email, password, username, address, phone_number, birthday, created_date, last_modified_date, reset_token, reset_token_expiration)
+        VALUES (#{email}, #{password}, #{username}, #{address}, #{phoneNumber}, #{birthday}, #{createdDate}, #{lastModifiedDate}, #{resetToken}, #{resetTokenExpiration})
     </insert>
 
 </mapper>

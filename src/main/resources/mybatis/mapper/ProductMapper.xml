@@ -16,11 +16,10 @@
         ${order != null and (order == 'ASC' or order == 'DESC') ? order : 'DESC'}
     </select>
 
-    <!-- 修改單筆產品 -->
-    <update id="updateProduct" parameterType="com.example.sunnymarketbackend.entity.Product">
+    <!-- 修改產品庫存 -->
+    <update id="updateStock" parameterType="com.example.sunnymarketbackend.entity.Product">
         UPDATE product_table
-        SET category = #{category}, product_name = #{productName}, image_url = #{imageUrl},
-            price = #{price}, stock = #{stock}, description = #{description}, last_modified_date = #{lastModifiedDate}
+        SET stock = #{stock}, last_modified_date = #{lastModifiedDate}
         WHERE product_id = #{productId}
     </update>
 
