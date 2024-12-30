@@ -80,10 +80,9 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST); //強制停止請求
         }
 
-        String hashedPassword = passwordEncoder.encode(userLoginRequest.getPassword());
 
-        //比較 String 要用 equals() 方法
-        if(user.getPassword().equals(hashedPassword)){ //如果前端傳來的值與資料庫一致
+        //比較明文密碼與資料庫加密密碼 密碼正確 return user
+        if(passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword())){ //如果前端傳來的值與資料庫一致
             return user;
         }else{
             log.warn("email {} 的密碼不正確", userLoginRequest.getEmail());
