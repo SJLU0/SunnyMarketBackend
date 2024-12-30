@@ -9,9 +9,9 @@
     </select>
 
     <!--從 id 取得 user 中的 Role-->
-    <select id="getUserByUserId" resultType="com.example.sunnymarketbackend.entity.Users">
-        SELECT role.role_id, role.role_name FROM role
-        JOIN user_has_role ON role.role_id = user_has_role.role_id
+    <select id="getRoleByUserId" resultType="com.example.sunnymarketbackend.entity.Role">
+        SELECT role_table.role_id, role_table.role_name FROM role_table
+        JOIN user_has_role ON role_table.role_id = user_has_role.role_id
         WHERE user_has_role.user_id = #{userId}
     </select>
 

@@ -13,7 +13,7 @@ import com.github.pagehelper.PageInfo;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/orders")
 public class OrderController {
 
     @Autowired
@@ -33,13 +33,13 @@ public class OrderController {
 
     //新增訂單&明細
     @PostMapping("{userId}/createOrder")
-    public ResponseEntity<?> createOrder(@PathVariable Long userId, 
+    public ResponseEntity<?> createOrder(@PathVariable Long userId,
                                          @RequestBody @Valid OrderRequest orderRequest) {
         //新增主檔回傳  orderId                                  
         Long orderId = orderService.createOrder(userId, orderRequest);
         //返回整筆訂單
         Order order = orderService.getOrderById(orderId);
-                        
+
         return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 

@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -88,5 +89,10 @@ public class UserServiceImpl implements UserService {
             log.warn("email {} 的密碼不正確", userLoginRequest.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST); //強制停止請求
         }
+    }
+
+    @Override
+    public List<Role> getRoleByUserId(Long userId) {
+        return userDao.getRoleByUserId(userId);
     }
 }
