@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.sunnymarketbackend.dao.OrderDao">
+  <!-- 查詢所有訂單 -->
+  <select id="getAllOrders"  resultType="com.example.sunnymarketbackend.entity.Order">
+    SELECT order_id, user_id, last_modified_date, total_amount, created_date
+    FROM order_table 
+     ORDER BY
+        ${sort != null and (sort == 'created_date') ? sort : 'created_date'}
+        ${order != null and (order == 'ASC' or order == 'DESC') ? order : 'DESC'}
+  </select>
+ 
+  <!-- 查詢訂單 -->
+  <select id="getOrderById" parameterType="long" resultType="com.example.sunnymarketbackend.entity.Order">
+    SELECT order_id, user_id, last_modified_date, total_amount, created_date
+    FROM order_table 
+    WHERE order_id = #{orderId}
+  </select>
+  
+  <!-- 查詢訂單明細 -->
+  <select id="getOrderItemsByOrderId" parameterType="long" resultType="com.example.sunnymarketbackend.entity.OrderItem">
+    SELECT oi.order_item_id, oi.order_id, oi.product_id, oi.quantity, oi.amount, p.product_name, p.image_url 
+    FROM order_item_table as oi 
+    LEFT JOIN product_table as p ON oi.product_id = p.product_id 
+    WHERE oi.order_id = #{orderId}
+  </select>
+  
+  <!-- 新增訂單 -->
+  <insert id="createOrder" parameterType="map" useGeneratedKeys="true" keyProperty="orderId" keyColumn="order_id">
+    INSERT INTO order_table (user_id, last_modified_date, total_amount, created_date)
+    VALUES (#{userId}, #{lastModifiedDate}, #{totalAmount}, #{createdDate})
+  </insert>
+  
+  <!-- 新增訂單明細 -->
+  <insert id="createOrderItems" parameterType="java.util.List">
+    INSERT INTO order_item_table (order_id, product_id, quantity, amount)
+    VALUES 
+    <foreach collection="list" item="item" separator=",">
+      (#{item.orderId}, #{item.productId}, #{item.quantity}, #{item.amount})
+    </foreach>
+  </insert>
+</mapper>

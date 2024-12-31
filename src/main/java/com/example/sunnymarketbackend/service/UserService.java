@@ -2,13 +2,18 @@ package com.example.sunnymarketbackend.service;
 
 import com.example.sunnymarketbackend.dto.UserLoginRequest;
 import com.example.sunnymarketbackend.dto.UserRegisterRequest;
-import com.example.sunnymarketbackend.entity.User;
+import com.example.sunnymarketbackend.entity.Role;
+import com.example.sunnymarketbackend.entity.Users;
+
+import java.util.List;
 
 public interface UserService {
 
-    User getUserById(Long userId);
+    Users getUserById(Long userId);
 
     Long register(UserRegisterRequest userRegisterRequest);
 
-    User login(UserLoginRequest userLoginRequest);
+    Users login(UserLoginRequest userLoginRequest);
+
+    List<Role> getRoleByUserId(Long userId);
 }

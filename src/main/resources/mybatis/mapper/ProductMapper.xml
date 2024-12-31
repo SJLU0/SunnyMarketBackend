@@ -16,6 +16,13 @@
         ${order != null and (order == 'ASC' or order == 'DESC') ? order : 'DESC'}
     </select>
 
+    <!-- 修改產品庫存 -->
+    <update id="updateStock" parameterType="com.example.sunnymarketbackend.entity.Product">
+        UPDATE product_table
+        SET stock = #{stock}, last_modified_date = #{lastModifiedDate}
+        WHERE product_id = #{productId}
+    </update>
+
   <!-- 新增產品 -->
     <insert id="addProduct" parameterType="com.example.sunnymarketbackend.entity.Product" useGeneratedKeys="true" keyProperty="productId">
         INSERT INTO product_table (category, product_Name, image_Url, price, stock, description, created_date, last_modified_date)

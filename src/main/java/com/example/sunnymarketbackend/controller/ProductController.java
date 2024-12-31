@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
@@ -46,7 +46,7 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Product> getProductById (@PathVariable Long productId) {
+    public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
         Product product = productService.getProductById(productId);
         if (product != null) {
             return ResponseEntity.ok(product);
@@ -56,11 +56,11 @@ public class ProductController {
     }
 
     @PutMapping("updateProduct/{productId}")
-    public ResponseEntity<Product> updateProduct (@PathVariable Long productId,
-                                                  @RequestBody ProductRequest productRequest){
-        //檢查 product 是否存在
+    public ResponseEntity<Product> updateProduct(@PathVariable Long productId,
+            @RequestBody ProductRequest productRequest) {
+        // 檢查 product 是否存在
         Product product = productService.getProductById(productId);
-        if(product == null){
+        if (product == null) {
             return ResponseEntity.notFound().build();
         }
         // 修改商品的數據
@@ -71,7 +71,7 @@ public class ProductController {
     }
 
     @DeleteMapping("deleteProduct/{productId}")
-    public ResponseEntity<?> deleteProductById (@PathVariable Long productId){
+    public ResponseEntity<?> deleteProductById(@PathVariable Long productId) {
         // 刪除商品
         productService.deleteProductById(productId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

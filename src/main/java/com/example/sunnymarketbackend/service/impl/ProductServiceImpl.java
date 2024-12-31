@@ -3,7 +3,6 @@ package com.example.sunnymarketbackend.service.impl;
 import com.example.sunnymarketbackend.constant.ProductCategory;
 import com.example.sunnymarketbackend.dto.ProductRequest;
 
-
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -59,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void updateProduct(Long productId, ProductRequest productRequest) {
 
-        //更新產品資料
+        // 更新產品資料
         Product existingProduct = new Product();
 
         existingProduct.setProductId(productId);
@@ -73,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
 
         int result = productDao.updateProduct(existingProduct);
 
-        if(result == 0){
+        if (result == 0) {
             throw new RuntimeException("Failed to update product: " + productId);
         }
     }
