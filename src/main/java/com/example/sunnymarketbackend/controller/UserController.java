@@ -50,7 +50,6 @@ public class UserController {
             List<Role> role = userService.getRoleByUserId(user.getUserId());
             UserLoginResponse userLoginResponse = new UserLoginResponse();
             userLoginResponse.setToken(token);
-            userLoginResponse.setRole(role.get(0).getRoleName());
             return ResponseEntity.status(HttpStatus.OK).body(userLoginResponse);
         }
         ErrorMessage errorMessage = new ErrorMessage();

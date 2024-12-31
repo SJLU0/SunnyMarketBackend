@@ -23,10 +23,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public PageInfo<Product> selectAllProducts(Integer pageNum,
-            Integer pageSize,
-            ProductCategory category,
-            String sort,
-            String order) {
+                                               Integer pageSize,
+                                               ProductCategory category,
+                                               String sort,
+                                               String order) {
         PageHelper.startPage(pageNum, pageSize);
 
         Page<Product> productList = productDao.selectAllProducts(category, sort, order);

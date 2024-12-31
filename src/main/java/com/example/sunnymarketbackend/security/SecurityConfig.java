@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -35,10 +36,13 @@ public class SecurityConfig {
                 .cors(cors ->
                     cors.configurationSource(createCorsConfig()))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/user/register", "/api/user/login", "/api/products/getAllProducts", "/api/products/{productId}").permitAll()
+                        .requestMatchers("/api/user/**", "/api/products/getAllProducts", "/api/products/{productId}").permitAll()
                         .requestMatchers("/orders/{userId}/createOrder", "/orders//{userId}/getAllOrders").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/products/addProduct", "/api/products/deleteProduct", "/api/products").hasAnyRole("ADMIN")
+                        .requestMatchers("/api/products/addProduct", "/api/products/deleteProduct", "/api/products").hasRole("ADMIN")
                         .anyRequest().denyAll()
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
