@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .cors(cors ->
                     cors.configurationSource(createCorsConfig()))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/user/register", "/api/user/login", "/api/products/getAllProducts", "/api/products/{productId}").permitAll()
+                        .requestMatchers("/api/user/**", "/api/products/getAllProducts", "/api/products/{productId}").permitAll()
                         .requestMatchers("/orders/{userId}/createOrder", "/orders//{userId}/getAllOrders").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/products/addProduct", "/api/products/deleteProduct", "/api/products").hasRole("ADMIN")
                         .anyRequest().denyAll()

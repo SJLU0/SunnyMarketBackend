@@ -1,6 +1,7 @@
 package com.example.sunnymarketbackend.service.impl;
 
 import com.example.sunnymarketbackend.dao.RoleDao;
+import com.example.sunnymarketbackend.dto.ErrorMessage;
 import com.example.sunnymarketbackend.entity.Role;
 import com.example.sunnymarketbackend.service.UserService;
 
