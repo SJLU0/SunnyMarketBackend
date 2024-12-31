@@ -11,7 +11,8 @@ public interface ProductService {
             Integer pageSize,
             ProductCategory category,
             String sort,
-            String order);
+            String order,
+            String productName);
 
     Long addProduct(ProductRequest productRequest);
 

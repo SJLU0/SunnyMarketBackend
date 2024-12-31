@@ -11,9 +11,6 @@ import org.springframework.http.ResponseEntity;
 import com.example.sunnymarketbackend.entity.Product;
 import com.example.sunnymarketbackend.service.ProductService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
@@ -29,8 +26,10 @@ public class ProductController {
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "category", required = false) ProductCategory category,
             @RequestParam(value = "sort", defaultValue = "createDate") String sort,
-            @RequestParam(value = "order", defaultValue = "DESC") String order) {
-        PageInfo<Product> productList = productService.selectAllProducts(pageNum, pageSize, category, sort, order);
+            @RequestParam(value = "order", defaultValue = "DESC") String order,
+            @RequestParam(value = "productName", required = false) String productName) {
+
+        PageInfo<Product> productList = productService.selectAllProducts(pageNum, pageSize, category, sort, order, productName);
         return ResponseEntity.ok(productList);
     }
 

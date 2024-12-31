@@ -1,19 +1,20 @@
 package com.example.sunnymarketbackend.service.impl;
 
-import com.example.sunnymarketbackend.constant.ProductCategory;
-import com.example.sunnymarketbackend.dto.ProductRequest;
+import java.time.LocalDateTime;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.sunnymarketbackend.constant.ProductCategory;
 import com.example.sunnymarketbackend.dao.ProductDao;
+import com.example.sunnymarketbackend.dto.ProductRequest;
 import com.example.sunnymarketbackend.entity.Product;
 import com.example.sunnymarketbackend.service.ProductService;
-
-import java.time.LocalDateTime;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -26,11 +27,13 @@ public class ProductServiceImpl implements ProductService {
                                                Integer pageSize,
                                                ProductCategory category,
                                                String sort,
-                                               String order) {
+                                               String order,
+                                               String productName) {
+                                            
+        //分頁                                        
         PageHelper.startPage(pageNum, pageSize);
-
-        Page<Product> productList = productDao.selectAllProducts(category, sort, order);
-
+        //查詢條件
+        Page<Product> productList = productDao.selectAllProducts(category, sort, order, productName);
         return new PageInfo<>(productList);
     }
 
