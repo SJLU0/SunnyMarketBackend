@@ -34,7 +34,7 @@ public class ProductController {
         return ResponseEntity.ok(productList);
     }
 
-    @PostMapping("/addProduct") // 新增商品
+    @PostMapping("/admin/addProduct")
     public ResponseEntity<Product> addProduct(@RequestBody @Valid ProductRequest productRequest) {
         Long productId = productService.addProduct(productRequest);
         Product product = productService.getProductById(productId);
@@ -55,7 +55,7 @@ public class ProductController {
         }
     }
 
-    @PutMapping("updateProduct/{productId}")
+    @PutMapping("/admin/updateProduct/{productId}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long productId,
             @RequestBody ProductRequest productRequest) {
         // 檢查 product 是否存在
@@ -70,7 +70,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(updateProduct);
     }
 
-    @DeleteMapping("deleteProduct/{productId}")
+    @DeleteMapping("/admin/deleteProduct/{productId}")
     public ResponseEntity<?> deleteProductById(@PathVariable Long productId) {
         // 刪除商品
         productService.deleteProductById(productId);
