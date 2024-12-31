@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/user/**", "/api/products/getAllProducts", "/api/products/{productId}").permitAll()
                         .requestMatchers("/orders/{userId}/createOrder", "/orders//{userId}/getAllOrders").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/products/addProduct", "/api/products/deleteProduct", "/api/products").hasRole("ADMIN")
+                        .requestMatchers("/api/products/admin/*").hasRole("ADMIN")
                         .anyRequest().denyAll()
                 )
                 .sessionManagement(session -> session
