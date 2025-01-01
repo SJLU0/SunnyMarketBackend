@@ -2,11 +2,8 @@ package com.example.sunnymarketbackend.controller;
 
 import com.example.sunnymarketbackend.dto.ErrorMessage;
 import com.example.sunnymarketbackend.dto.UserLoginRequest;
-import com.example.sunnymarketbackend.dto.UserLoginResponse;
 import com.example.sunnymarketbackend.dto.UserRegisterRequest;
-import com.example.sunnymarketbackend.entity.Role;
 import com.example.sunnymarketbackend.entity.Users;
-import com.example.sunnymarketbackend.security.JwtUtil;
 import com.example.sunnymarketbackend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -28,8 +23,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private JwtUtil jwtUtil;
 
     @PostMapping("/register")
     public ResponseEntity<Users> register(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
@@ -45,15 +38,12 @@ public class UserController {
         Users user = userService.login(userLoginRequest);
 
         if(user != null) {
-            Map<String, Object> extraClaims = new HashMap();
-            String token = jwtUtil.generateToken(extraClaims, user.getEmail(), user.getUserId());
-            List<Role> role = userService.getRoleByUserId(user.getUserId());
-            UserLoginResponse userLoginResponse = new UserLoginResponse();
-            userLoginResponse.setToken(token);
-            return ResponseEntity.status(HttpStatus.OK).body(userLoginResponse);
+            Map token = userService.jwtBulid(user.getUserId(), user.getEmail());
+            return ResponseEntity.status(HttpStatus.OK).body(token);
+        }else{
+            ErrorMessage errorMessage = new ErrorMessage();
+            errorMessage.setMessage("登入失敗，帳號或密碼錯誤");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
         }
-        ErrorMessage errorMessage = new ErrorMessage();
-        errorMessage.setMessage("登入失敗，帳號或密碼錯誤");
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
     }
 }

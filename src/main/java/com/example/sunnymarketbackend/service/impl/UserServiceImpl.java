@@ -1,8 +1,8 @@
 package com.example.sunnymarketbackend.service.impl;
 
 import com.example.sunnymarketbackend.dao.RoleDao;
-import com.example.sunnymarketbackend.dto.ErrorMessage;
 import com.example.sunnymarketbackend.entity.Role;
+import com.example.sunnymarketbackend.security.JwtUtil;
 import com.example.sunnymarketbackend.service.UserService;
 
 import com.example.sunnymarketbackend.dao.UserDao;
@@ -15,11 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -35,6 +35,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Transactional
     @Override
     public Long register(UserRegisterRequest userRegisterRequest) {
         //檢查註冊 email
@@ -82,7 +86,6 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST); //強制停止請求
         }
 
-
         //比較明文密碼與資料庫加密密碼 密碼正確 return user
         if(passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword())){ //如果前端傳來的值與資料庫一致
             return user;
@@ -93,7 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Role> getRoleByUserId(Long userId) {
-        return userDao.getRoleByUserId(userId);
+    public Map<String, Object> jwtBulid(Long userId, String email) {
+        return jwtUtil.generateToken(userId, email);
     }
 }
