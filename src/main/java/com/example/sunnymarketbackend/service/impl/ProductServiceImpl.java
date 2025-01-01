@@ -1,6 +1,7 @@
 package com.example.sunnymarketbackend.service.impl;
 
 import com.example.sunnymarketbackend.constant.ProductCategory;
+import com.example.sunnymarketbackend.dto.ProductQueryParams;
 import com.example.sunnymarketbackend.dto.ProductRequest;
 
 import com.github.pagehelper.Page;
@@ -22,14 +23,10 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao;
 
     @Override
-    public PageInfo<Product> selectAllProducts(Integer pageNum,
-                                               Integer pageSize,
-                                               ProductCategory category,
-                                               String sort,
-                                               String order) {
-        PageHelper.startPage(pageNum, pageSize);
+    public PageInfo<Product> selectAllProducts(ProductQueryParams params) {
+        PageHelper.startPage(params.getPageNum(), params.getPageSize());
 
-        Page<Product> productList = productDao.selectAllProducts(category, sort, order);
+        Page<Product> productList = productDao.selectAllProducts(params.getCategory(), params.getSort(), params.getOrder());
 
         return new PageInfo<>(productList);
     }
