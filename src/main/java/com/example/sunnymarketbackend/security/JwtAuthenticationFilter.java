@@ -42,6 +42,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 檢查 Authorization Header 是否有效
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("請重新登入");
             filterChain.doFilter(request, response);
             return;
         }
