@@ -2,6 +2,9 @@ package com.example.sunnymarketbackend.service.impl;
 
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.example.sunnymarketbackend.constant.ProductCategory;
 import com.example.sunnymarketbackend.dto.ProductQueryParams;
 import com.example.sunnymarketbackend.dto.ProductRequest;
@@ -30,8 +33,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public PageInfo<Product> selectAllProducts(ProductQueryParams params) {
         PageHelper.startPage(params.getPageNum(), params.getPageSize());
-
-        Page<Product> productList = productDao.selectAllProducts(params.getCategory(), params.getSort(), params.getOrder());
+        Map<String, Object> map = new HashMap();
+        map.put("category", params.getCategory());
+        map.put("sort", params.getSort());
+        map.put("order", params.getOrder());
+        map.put("search", params.getSearch());
+        Page<Product> productList = productDao.selectAllProducts(map);
 
         return new PageInfo<>(productList);
     }

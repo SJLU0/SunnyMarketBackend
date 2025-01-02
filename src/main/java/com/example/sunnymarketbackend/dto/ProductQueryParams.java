@@ -9,6 +9,7 @@ public class ProductQueryParams {
     private ProductCategory category;
     private String sort;
     private String order;
+    private String search;
 
     public Integer getPageNum() {
         return pageNum;
@@ -48,5 +49,13 @@ public class ProductQueryParams {
 
     public void setOrder(String order) {
         this.order = order;
+    }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
     }
 }

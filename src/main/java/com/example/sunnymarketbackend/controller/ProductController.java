@@ -28,16 +28,14 @@ public class ProductController {
             @RequestParam(value = "category", required = false) ProductCategory category,
             @RequestParam(value = "sort", defaultValue = "createDate") String sort,
             @RequestParam(value = "order", defaultValue = "DESC") String order,
-            @RequestParam(value = "productName", required = false) String productName) {
-
-        PageInfo<Product> productList = productService.selectAllProducts(pageNum, pageSize, category, sort, order, productName);
-            @RequestParam(value = "order", defaultValue = "DESC") String order) {
+            @RequestParam(value = "search", required = false) String search) {
         ProductQueryParams params = new ProductQueryParams();
         params.setPageNum(pageNum);
         params.setPageSize(pageSize);
         params.setCategory(category);
         params.setSort(sort);
         params.setOrder(order);
+        params.setSearch(search);
         PageInfo<Product> productList = productService.selectAllProducts(params);
         return ResponseEntity.ok(productList);
     }

@@ -8,15 +8,13 @@ import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Mapper
 public interface ProductDao extends BaseMapper<Product> {
 
     // 所有產品分頁
-    Page<Product> selectAllProducts(ProductCategory category,
-            String sort,
-            String order,
-            String productName);
+    Page<Product> selectAllProducts(Map<String, Object> map);
 
     void updateStock(Long productId, Integer stock, LocalDateTime lastModifiedDate);
 
