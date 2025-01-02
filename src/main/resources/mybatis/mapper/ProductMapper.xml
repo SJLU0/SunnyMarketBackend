@@ -7,8 +7,12 @@
         SELECT product_id, product_name, category, image_Url, price, stock, description, created_date, last_modified_date
         FROM product_table
         <where>
+            <!-- 類別篩選條件 -->
             <if test="category != null">
-                category = #{category}
+                AND category = #{category}
+            </if>
+            <if test="productName != null and productName.trim() != '' ">
+                AND product_name LIKE CONCAT('%', #{productName}, '%')
             </if>
         </where>
         ORDER BY

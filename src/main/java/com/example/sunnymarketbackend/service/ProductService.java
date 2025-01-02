@@ -8,6 +8,7 @@ import com.github.pagehelper.PageInfo;
 
 public interface ProductService {
 
+
     PageInfo<Product> selectAllProducts(ProductQueryParams params);
 
     Long addProduct(ProductRequest productRequest);

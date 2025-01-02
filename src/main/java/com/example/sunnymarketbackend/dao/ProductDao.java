@@ -15,7 +15,8 @@ public interface ProductDao extends BaseMapper<Product> {
     // 所有產品分頁
     Page<Product> selectAllProducts(ProductCategory category,
             String sort,
-            String order);
+            String order,
+            String productName);
 
     void updateStock(Long productId, Integer stock, LocalDateTime lastModifiedDate);
 
