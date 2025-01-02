@@ -1,6 +1,7 @@
 package com.example.sunnymarketbackend.controller;
 
 import com.example.sunnymarketbackend.constant.ProductCategory;
+import com.example.sunnymarketbackend.dto.ProductQueryParams;
 import com.example.sunnymarketbackend.dto.ProductRequest;
 import com.github.pagehelper.PageInfo;
 import jakarta.validation.Valid;
@@ -30,6 +31,14 @@ public class ProductController {
             @RequestParam(value = "productName", required = false) String productName) {
 
         PageInfo<Product> productList = productService.selectAllProducts(pageNum, pageSize, category, sort, order, productName);
+            @RequestParam(value = "order", defaultValue = "DESC") String order) {
+        ProductQueryParams params = new ProductQueryParams();
+        params.setPageNum(pageNum);
+        params.setPageSize(pageSize);
+        params.setCategory(category);
+        params.setSort(sort);
+        params.setOrder(order);
+        PageInfo<Product> productList = productService.selectAllProducts(params);
         return ResponseEntity.ok(productList);
     }
 
