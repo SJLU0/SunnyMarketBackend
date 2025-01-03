@@ -33,7 +33,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String requestURI = request.getRequestURI();
         if (requestURI.startsWith("/api/products/getAllProducts") ||
-                requestURI.startsWith("/api/user/")) {
+                requestURI.startsWith("/api/user/") ||
+                        requestURI.startsWith("/api/products")) {
             filterChain.doFilter(request, response); // 放行這些路徑
             return;
         }
