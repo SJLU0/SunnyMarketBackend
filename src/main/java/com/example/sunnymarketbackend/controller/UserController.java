@@ -5,6 +5,7 @@ import com.example.sunnymarketbackend.dto.UserLoginRequest;
 import com.example.sunnymarketbackend.dto.UserRegisterRequest;
 import com.example.sunnymarketbackend.entity.Users;
 import com.example.sunnymarketbackend.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,10 +35,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid UserLoginRequest userLoginRequest) {
+    public ResponseEntity<?> login(@RequestBody @Valid UserLoginRequest userLoginRequest, HttpServletRequest request) {
         Users user = userService.login(userLoginRequest);
 
         if(user != null) {
+            userService.loginRecord(user.getUserId() ,request);
             Map token = userService.jwtBulid(user.getUserId(), user.getEmail());
             token.put("message", "登入成功，請稍後 login wating...");
             return ResponseEntity.status(HttpStatus.OK).body(token);
