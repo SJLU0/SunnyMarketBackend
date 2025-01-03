@@ -23,7 +23,6 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthFilter;
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -36,10 +35,11 @@ public class SecurityConfig {
                 .cors(cors ->
                     cors.configurationSource(createCorsConfig()))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/user/**", "/api/products/getAllProducts", "/api/products/{productId}").permitAll()
-                        .requestMatchers("/orders/{userId}/createOrder", "/orders//{userId}/getAllOrders").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/products/admin/*").hasRole("ADMIN")
-                        .anyRequest().denyAll()
+                                .anyRequest().permitAll()
+//                        .requestMatchers("/api/user/**", "/api/products/getAllProducts", "/api/products/{productId}").permitAll()
+//                        .requestMatchers("/orders/{userId}/createOrder", "/orders//{userId}/getAllOrders").hasAnyRole("USER", "ADMIN")
+//                        .requestMatchers("/api/products/admin/*").hasRole("ADMIN")
+//                        .anyRequest().denyAll()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
