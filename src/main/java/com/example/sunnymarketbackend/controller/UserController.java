@@ -39,7 +39,7 @@ public class UserController {
 
         if(user != null) {
             Map token = userService.jwtBulid(user.getUserId(), user.getEmail());
-            token.put("message", "登入成功，請稍後 login wating ho");
+            token.put("message", "登入成功，請稍後 login wating...");
             return ResponseEntity.status(HttpStatus.OK).body(token);
         }else{
             ErrorMessage errorMessage = new ErrorMessage();
