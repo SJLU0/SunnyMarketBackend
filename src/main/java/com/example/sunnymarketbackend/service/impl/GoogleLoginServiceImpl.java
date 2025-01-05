@@ -25,8 +25,10 @@ import java.util.Map;
 @Service
 public class GoogleLoginServiceImpl implements GoogleLoginService {
 
+    @Value("${google.auth.url}")
     private String GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 
+    @Value("${google.token.url}")
     private String GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
@@ -38,10 +40,8 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
     @Override
     public Map<String, Object> buildAuthUrl() {
 
-        String authUrl = GOOGLE_AUTH_URL;
-
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
-                .fromHttpUrl(authUrl)
+                .fromHttpUrl(GOOGLE_AUTH_URL)
                 .queryParam("response_type", "code")
                 .queryParam("client_id", clientId)
                 .queryParam("scope", "profile+email+openid")
@@ -59,6 +59,7 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
     public GoogleUserData getUserInfo(String code) {
         GoogleAccessTokenResponse googleAccessTokenResponse = getAccessToken(code);
         GoogleUserData userInfo = getGoogleUser(googleAccessTokenResponse.getAccessToken());
+        //TODO 送入資料庫邏輯
         return userInfo;
     }
 
@@ -68,8 +69,6 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-
-        String tokenUrl = GOOGLE_TOKEN_URL;
 
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
@@ -82,13 +81,12 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
         String result;
         try {
             result = restTemplate.postForObject(
-                    tokenUrl,
+                    GOOGLE_TOKEN_URL,
                     new HttpEntity<>(body, headers),
                     String.class
             );
             // 使用 Jackson 將 JSON 字串轉換為物件
             ObjectMapper objectMapper = new ObjectMapper();
-
             return objectMapper.readValue(result, GoogleAccessTokenResponse.class);
         } catch (Exception e) {
             throw new RuntimeException("無法從 Google 獲取 Access Token: " + e.getMessage(), e);

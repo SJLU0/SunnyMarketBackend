@@ -49,6 +49,7 @@ public class GoogleLoginController {
         return ResponseEntity.ok().body(googleUserData);
     }
 
+    //TODO 將 refreshToken 存到資料庫，並將邏輯改換至 Service
     @PostMapping("/refreshToken")
     public String refreshToken(@RequestParam String refreshToken) {
 
