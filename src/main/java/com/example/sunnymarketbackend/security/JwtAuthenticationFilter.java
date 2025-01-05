@@ -34,7 +34,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         if (requestURI.startsWith("/api/products/getAllProducts") ||
                 requestURI.startsWith("/api/user/") ||
-                        requestURI.startsWith("/api/products")) {
+                        requestURI.startsWith("/api/products") ||
+                requestURI.startsWith("/google")){
             filterChain.doFilter(request, response); // 放行這些路徑
             return;
         }
@@ -44,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 檢查 Authorization Header 是否有效
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("請重新登入");
+//            response.getWriter().write("請重新登入");
             filterChain.doFilter(request, response);
             return;
         }
