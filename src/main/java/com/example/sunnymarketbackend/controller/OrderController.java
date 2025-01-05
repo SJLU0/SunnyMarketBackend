@@ -42,5 +42,29 @@ public class OrderController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
+    //刪除訂單與訂單明細
+    @DeleteMapping("{userId}/{orderId}")
+    public ResponseEntity<?> deleteOrder(@PathVariable Long userId, @PathVariable Long orderId) {
+       try{
+        orderService.deleteOrder(orderId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+       }
+       catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("刪除訂單失敗" + e.getMessage());
+       }
+        
+    }
+    //刪除單筆訂單明細
+    @DeleteMapping("{userId}/{orderId}/orderItems/{orderItemId}")
+    public ResponseEntity<?> deleteOrderItem(@PathVariable Long userId, @PathVariable Long orderId, @PathVariable Long orderItemId) {
+       try {
+        orderService.deleteOrderItem(orderItemId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        
+       } 
+       catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("刪除訂單明細失敗" + e.getMessage());
+        }
+    }
 
 }

@@ -134,4 +134,30 @@ public class OrderServiceImpl implements OrderService {
         return orderId;
     }
 
+    @Override
+    public void deleteOrder(Long orderId) {
+        Order order = orderDao.getOrderById(orderId);
+        if (order == null) {
+            log.warn("Order not found: {}", orderId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        orderDao.deleteOrderItemsByOrderId(orderId);
+        orderDao.deleteOrder(orderId);
+      
+    }
+
+    @Override
+    public void deleteOrderItem(Long orderItemId) {
+        try {
+            orderDao.deleteOrderItem(orderItemId);
+        } 
+        catch (Exception e) {
+            log.error("Failed to delete order item: {}", orderItemId, e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
+     
+    }
+
 }

@@ -12,6 +12,11 @@ public interface OrderService {
     Long createOrder(Long userId, OrderRequest orderRequest);
     //查詢訂單
     Order getOrderById(Long orderId);
+    //刪除訂單與明細
+    void deleteOrder(Long orderId);
+    //刪除單筆訂單明細
+    void deleteOrderItem(Long orderItemId);
+    
 
 
 }

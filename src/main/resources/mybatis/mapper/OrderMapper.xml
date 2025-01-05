@@ -39,4 +39,22 @@
       (#{item.orderId}, #{item.productId}, #{item.quantity}, #{item.amount})
     </foreach>
   </insert>
+  <!-- 刪除訂單明細 -->
+  <delete id="deleteOrderItemsByOrderId" parameterType="long">
+      DELETE FROM order_item_table
+      WHERE order_id = #{orderId}
+  </delete>
+
+  <!-- 刪除訂單 -->
+  <delete id="deleteOrder" parameterType="long">
+      DELETE FROM order_table
+      WHERE order_id = #{orderId}
+  </delete>
+  <!-- 刪除單筆訂單明細 -->
+  <delete id="deleteOrderItem" parameterType="long">
+      DELETE FROM order_item_table
+      WHERE order_item_id = #{orderItemId}
+  </delete>  
+
+
 </mapper>

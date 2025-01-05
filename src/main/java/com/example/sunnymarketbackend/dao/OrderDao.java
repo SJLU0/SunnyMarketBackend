@@ -23,7 +23,12 @@ public interface OrderDao extends BaseMapper<Order> {
     
     // 創建訂單明細
     void createOrderItems(List<OrderItem> orderItemList );
-
+    // 刪除訂單
+    void deleteOrder(Long orderId);
+    // 刪除訂單明細
+    void deleteOrderItemsByOrderId(Long orderId);
+    // 刪除單筆訂單明細
+    void deleteOrderItem(Long orderItemId);
 
 
 }
