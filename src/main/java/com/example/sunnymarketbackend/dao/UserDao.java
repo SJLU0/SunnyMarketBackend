@@ -1,6 +1,6 @@
 package com.example.sunnymarketbackend.dao;
 
-import com.example.sunnymarketbackend.dto.UserRegisterRequest;
+import com.example.sunnymarketbackend.entity.LoginRecord;
 import com.example.sunnymarketbackend.entity.Role;
 import com.example.sunnymarketbackend.entity.Users;
 
@@ -19,4 +19,6 @@ public interface UserDao {
 
     //新增註冊帳號的預設權限
     void addRoleForUserId(Long userId, Long roleId);
+
+    void addLoginRecordToUserId(LoginRecord loginRecord);
 }

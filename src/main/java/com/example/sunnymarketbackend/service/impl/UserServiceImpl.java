@@ -1,6 +1,7 @@
 package com.example.sunnymarketbackend.service.impl;
 
 import com.example.sunnymarketbackend.dao.RoleDao;
+import com.example.sunnymarketbackend.entity.LoginRecord;
 import com.example.sunnymarketbackend.entity.Role;
 import com.example.sunnymarketbackend.security.JwtUtil;
 import com.example.sunnymarketbackend.service.UserService;
@@ -9,6 +10,7 @@ import com.example.sunnymarketbackend.dao.UserDao;
 import com.example.sunnymarketbackend.dto.UserLoginRequest;
 import com.example.sunnymarketbackend.dto.UserRegisterRequest;
 import com.example.sunnymarketbackend.entity.Users;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import ua_parser.Client;
+import ua_parser.Parser;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -98,5 +102,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map<String, Object> jwtBulid(Long userId, String email) {
         return jwtUtil.generateToken(userId, email);
+    }
+
+    @Override
+    public void loginRecord(Long userId, HttpServletRequest request) {
+
+        String ipAddress = request.getHeader("X-Forwarded-For");
+        if (ipAddress == null || ipAddress.isEmpty()) {
+            ipAddress = request.getRemoteAddr(); // 獲取原始請求 IP
+        }
+
+        Parser uaParser = new Parser();
+        Client client = uaParser.parse(request.getHeader("User-Agent"));
+        String deviceInfo = client.device.family + " " + client.os.family + " " + client.userAgent.family;
+
+        LoginRecord loginRecord = new LoginRecord();
+        loginRecord.setLoginTime(LocalDateTime.now());
+        loginRecord.setIpAddress(ipAddress);
+        loginRecord.setUserId(userId);
+        loginRecord.setDeviceInfo(deviceInfo);
+
+        userDao.addLoginRecordToUserId(loginRecord);
     }
 }
