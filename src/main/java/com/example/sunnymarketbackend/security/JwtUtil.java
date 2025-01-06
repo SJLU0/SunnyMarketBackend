@@ -54,6 +54,21 @@ public class JwtUtil {
         return token;
     }
 
+    public String generateToken(String googleUserId, String email) {
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("googleUserId", googleUserId);
+        String jwt = Jwts
+                .builder()
+                .setClaims(extraClaims)  // 設定額外聲明
+                .setSubject(email)  // 設定主體為用戶的 email
+                .setIssuedAt(new Date(System.currentTimeMillis()))  // 設定當前時間為簽發時間
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))  // 使用從配置文件中加載的過期時間
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)  // 使用 HMAC SHA-256 演算法簽名，並提供密鑰
+                .compact();  // 組裝 JWT
+
+        return jwt;
+    }
+
     // 檢查 JWT 是否有效（即用戶名是否匹配且 token 是否過期）
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);  // 提取 JWT 中的用戶名
