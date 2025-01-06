@@ -1,10 +1,12 @@
 package com.example.sunnymarketbackend.service.impl;
 
+import com.example.sunnymarketbackend.dao.UserDao;
 import com.example.sunnymarketbackend.dto.GoogleAccessTokenResponse;
 import com.example.sunnymarketbackend.dto.GoogleUserData;
 import com.example.sunnymarketbackend.service.GoogleLoginService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.openid.connect.sdk.claims.UserInfo;
+import com.nimbusds.oauth2.sdk.AccessTokenResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +26,9 @@ import java.util.Map;
 
 @Service
 public class GoogleLoginServiceImpl implements GoogleLoginService {
+
+    @Autowired
+    private UserDao userDao;
 
     @Value("${google.auth.url}")
     private String GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
@@ -56,9 +61,9 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
     }
 
     @Override
-    public GoogleUserData getUserInfo(String code) {
+    public GoogleUserData googleLogin(String code) {
         GoogleAccessTokenResponse googleAccessTokenResponse = getAccessToken(code);
-        GoogleUserData userInfo = getGoogleUser(googleAccessTokenResponse.getAccessToken());
+        GoogleUserData userInfo = getGoogleUser(googleAccessTokenResponse);
         //TODO 送入資料庫邏輯
         return userInfo;
     }
@@ -87,17 +92,19 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
             );
             // 使用 Jackson 將 JSON 字串轉換為物件
             ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(result, GoogleAccessTokenResponse.class);
+            GoogleAccessTokenResponse googleAccessTokenResponse = objectMapper.readValue(result, GoogleAccessTokenResponse.class);
+
+            return googleAccessTokenResponse;
         } catch (Exception e) {
             throw new RuntimeException("無法從 Google 獲取 Access Token: " + e.getMessage(), e);
         }
     }
 
-    private GoogleUserData getGoogleUser(String accessToken) {
+    private GoogleUserData getGoogleUser(GoogleAccessTokenResponse googleAccessTokenResponse) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + accessToken);
+        headers.set("Authorization", "Bearer " + googleAccessTokenResponse.getAccessToken());
 //        headers.setBearerAuth(accessToken);
 
         // call Google 的 api，取得使用者在 Google 中的基本資料

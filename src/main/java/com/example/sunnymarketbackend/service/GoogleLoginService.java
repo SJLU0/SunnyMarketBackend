@@ -8,6 +8,6 @@ public interface GoogleLoginService {
 
     Map<String,Object> buildAuthUrl();
 
-    GoogleUserData getUserInfo(String code);
+    GoogleUserData googleLogin(String code);
 
 }
