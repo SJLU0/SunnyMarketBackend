@@ -2,7 +2,7 @@ package com.example.sunnymarketbackend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class GoogleUserData {
+public class GoogleUserDataResponse {
 
     @JsonProperty("id")
     private String providerId;
@@ -24,6 +24,8 @@ public class GoogleUserData {
 
     @JsonProperty("refresh_token")
     private String refreshToken;
+
+    private String token;
 
     public String getProviderId() {
         return providerId;
@@ -87,5 +89,13 @@ public class GoogleUserData {
 
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

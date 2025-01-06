@@ -8,8 +8,8 @@ public class LoginRecord {
     private Long userId;
     private LocalDateTime loginTime;
     private String ipAddress;
-    private String deviceInfo;
-    private String location;
+    private String osName;
+    private String browser;
 
     public Long getRecordId() {
         return recordId;
@@ -43,19 +43,19 @@ public class LoginRecord {
         this.ipAddress = ipAddress;
     }
 
-    public String getDeviceInfo() {
-        return deviceInfo;
+    public String getOsName() {
+        return osName;
     }
 
-    public void setDeviceInfo(String deviceInfo) {
-        this.deviceInfo = deviceInfo;
+    public void setOsName(String osName) {
+        this.osName = osName;
     }
 
-    public String getLocation() {
-        return location;
+    public String getBrowser() {
+        return browser;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setBrowser(String browser) {
+        this.browser = browser;
     }
 }

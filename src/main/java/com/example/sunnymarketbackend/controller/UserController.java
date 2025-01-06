@@ -3,18 +3,18 @@ package com.example.sunnymarketbackend.controller;
 import com.example.sunnymarketbackend.dto.ErrorMessage;
 import com.example.sunnymarketbackend.dto.UserLoginRequest;
 import com.example.sunnymarketbackend.dto.UserRegisterRequest;
+import com.example.sunnymarketbackend.entity.LoginRecord;
 import com.example.sunnymarketbackend.entity.Users;
+import com.example.sunnymarketbackend.security.JwtUtil;
 import com.example.sunnymarketbackend.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -24,6 +24,15 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @GetMapping("/loginRecord/{userId}")
+    public ResponseEntity<?> loginRecord(@PathVariable Long userId) {
+        List<LoginRecord> loginRecordList = userService.getLoginRecordByUserId(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(loginRecordList);
+    }
 
     @PostMapping("/register")
     public ResponseEntity<Users> register(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
@@ -40,7 +49,7 @@ public class UserController {
 
         if(user != null) {
             userService.loginRecord(user.getUserId() ,request);
-            Map token = userService.jwtBulid(user.getUserId(), user.getEmail());
+            Map token = jwtUtil.generateToken(user.getUserId(), user.getEmail());
             token.put("message", "登入成功，請稍後 login wating...");
             return ResponseEntity.status(HttpStatus.OK).body(token);
         }else{
