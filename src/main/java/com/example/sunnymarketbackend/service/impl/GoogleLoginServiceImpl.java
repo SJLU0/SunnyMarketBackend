@@ -3,6 +3,7 @@ package com.example.sunnymarketbackend.service.impl;
 import com.example.sunnymarketbackend.dao.UserDao;
 import com.example.sunnymarketbackend.dto.GoogleAccessTokenResponse;
 import com.example.sunnymarketbackend.dto.GoogleUserData;
+import com.example.sunnymarketbackend.entity.Users;
 import com.example.sunnymarketbackend.service.GoogleLoginService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.oauth2.sdk.AccessTokenResponse;
@@ -19,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -121,8 +123,24 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
                     )
                     .getBody();
             ObjectMapper objectMapper = new ObjectMapper();
+            GoogleUserData googleUserData = objectMapper.readValue(result, GoogleUserData.class);
 
-            return objectMapper.readValue(result, GoogleUserData.class);
+            Users users = userDao.getUserByEmail(googleUserData.getEmail());
+
+            if(users == null) {
+                Users newUser = new Users();
+                newUser.setEmail(googleUserData.getEmail());
+                newUser.setProviderId(googleUserData.getProviderId());
+                newUser.setUsername(googleUserData.getName());
+                newUser.setProvider("google");
+                newUser.setRefreshToken(googleAccessTokenResponse.getRefreshToken());
+                newUser.setCreatedDate(LocalDateTime.now());
+                newUser.setLastModifiedDate(LocalDateTime.now());
+
+                userDao.createUser(newUser);
+            }
+
+            return googleUserData;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
