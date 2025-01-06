@@ -71,8 +71,8 @@
     </insert>
 
     <insert id="addLoginRecordToUserId" parameterType="com.example.sunnymarketbackend.entity.LoginRecord" useGeneratedKeys="true">
-        INSERT INTO login_record_table (user_id, login_time, ip_address, device_info)
-        VALUES (#{userId}, #{loginTime}, #{ipAddress}, #{deviceInfo})
+        INSERT INTO login_record_table (user_id, login_time, ip_address, os_name, browser)
+        VALUES (#{userId}, #{loginTime}, #{ipAddress}, #{osName}, #{browser})
     </insert>
 
     <select id="getLoginRecordByUserId" resultType="com.example.sunnymarketbackend.entity.LoginRecord">
