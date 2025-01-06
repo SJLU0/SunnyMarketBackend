@@ -44,8 +44,8 @@ public class GoogleLoginController {
     }
 
     @PostMapping("/getGoogleCode")
-    public ResponseEntity<GoogleUserData> getCode(@RequestBody GoogleLoginRequest googleLoginRequest) {
-        GoogleUserData googleUserData = googleLoginService.getUserInfo(googleLoginRequest.getCode());
+    public ResponseEntity<GoogleUserData> googleLogin(@RequestBody GoogleLoginRequest googleLoginRequest) {
+        GoogleUserData googleUserData = googleLoginService.googleLogin(googleLoginRequest.getCode());
         return ResponseEntity.ok().body(googleUserData);
     }
 
