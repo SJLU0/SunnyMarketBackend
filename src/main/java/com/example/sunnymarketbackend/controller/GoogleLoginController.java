@@ -36,7 +36,7 @@ public class GoogleLoginController {
     @GetMapping("/buildAuthUrl")
     public ResponseEntity<Map<String, Object>> buildAuthUrl() {
         Map<String, Object> urlMap = googleLoginService.buildAuthUrl();
-        return ResponseEntity.ok().body(urlMap);
+        return ResponseEntity.status(HttpStatus.OK).body(urlMap);
     }
 
     @PostMapping("/getGoogleCode")
@@ -44,6 +44,6 @@ public class GoogleLoginController {
         GoogleUserDataResponse googleUserData = googleLoginService.googleLogin(googleLoginRequest.getCode());
         String token = jwtUtil.generateToken(googleUserData.getProviderId(), googleUserData.getEmail());
         googleUserData.setToken(token);
-        return ResponseEntity.ok().body(googleUserData);
+        return ResponseEntity.status(HttpStatus.OK).body(googleUserData);
     }
 }

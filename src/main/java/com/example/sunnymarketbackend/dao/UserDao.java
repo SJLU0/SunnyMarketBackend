@@ -21,4 +21,6 @@ public interface UserDao {
     void addRoleForUserId(Long userId, Long roleId);
 
     void addLoginRecordToUserId(LoginRecord loginRecord);
+
+    List<LoginRecord> getLoginRecordByUserId(Long userId);
 }

@@ -23,6 +23,7 @@ import ua_parser.Client;
 import ua_parser.Parser;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -38,9 +39,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtUtil jwtUtil;
 
     @Transactional
     @Override
@@ -109,14 +107,18 @@ public class UserServiceImpl implements UserService {
 
         Parser uaParser = new Parser();
         Client client = uaParser.parse(request.getHeader("User-Agent"));
-        String deviceInfo = client.device.family + " " + client.os.family + " " + client.userAgent.family;
 
         LoginRecord loginRecord = new LoginRecord();
         loginRecord.setLoginTime(LocalDateTime.now());
         loginRecord.setIpAddress(ipAddress);
         loginRecord.setUserId(userId);
-        loginRecord.setDeviceInfo(deviceInfo);
+        loginRecord.setOsName(client.os.family);
+        loginRecord.setBrowser(client.userAgent.family);
 
         userDao.addLoginRecordToUserId(loginRecord);
+    }
+
+    public List<LoginRecord> getLoginRecordByUserId(Long userId) {
+        return userDao.getLoginRecordByUserId(userId);
     }
 }
