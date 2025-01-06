@@ -2,11 +2,10 @@ package com.example.sunnymarketbackend.service.impl;
 
 import com.example.sunnymarketbackend.dao.UserDao;
 import com.example.sunnymarketbackend.dto.GoogleAccessTokenResponse;
-import com.example.sunnymarketbackend.dto.GoogleUserData;
+import com.example.sunnymarketbackend.dto.GoogleUserDataResponse;
 import com.example.sunnymarketbackend.entity.Users;
 import com.example.sunnymarketbackend.service.GoogleLoginService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.oauth2.sdk.AccessTokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -63,10 +62,9 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
     }
 
     @Override
-    public GoogleUserData googleLogin(String code) {
+    public GoogleUserDataResponse googleLogin(String code) {
         GoogleAccessTokenResponse googleAccessTokenResponse = getAccessToken(code);
-        GoogleUserData userInfo = getGoogleUser(googleAccessTokenResponse);
-        //TODO 送入資料庫邏輯
+        GoogleUserDataResponse userInfo = getGoogleUserByAccessToken(googleAccessTokenResponse);
         return userInfo;
     }
 
@@ -102,7 +100,7 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
         }
     }
 
-    private GoogleUserData getGoogleUser(GoogleAccessTokenResponse googleAccessTokenResponse) {
+    private GoogleUserDataResponse getGoogleUserByAccessToken(GoogleAccessTokenResponse googleAccessTokenResponse) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -123,7 +121,7 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
                     )
                     .getBody();
             ObjectMapper objectMapper = new ObjectMapper();
-            GoogleUserData googleUserData = objectMapper.readValue(result, GoogleUserData.class);
+            GoogleUserDataResponse googleUserData = objectMapper.readValue(result, GoogleUserDataResponse.class);
 
             Users users = userDao.getUserByEmail(googleUserData.getEmail());
 
@@ -143,6 +141,42 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
             return googleUserData;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
+        }
+    }
+
+    private GoogleUserDataResponse getGoogleUserByRefeshToken(String refreshToken){
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        // 使用 Google 所提供的 token url，傳遞 refresh_token 的值過去，即可取得到新的 access token
+        String tokenUrl = GOOGLE_TOKEN_URL;
+
+        // 填寫 request body 中的請求參數
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("grant_type", "refresh_token");
+        body.add("client_id", clientId);
+        body.add("client_secret", clientSecret);
+        body.add("refresh_token", refreshToken);
+
+        // 發送請求
+        String result;
+        try {
+            result = restTemplate.postForObject(
+                    tokenUrl,
+                    new HttpEntity<>(body, headers),
+                    String.class
+            );
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            GoogleUserDataResponse googleUserData = objectMapper.readValue(result, GoogleUserDataResponse.class);
+
+            return googleUserData;
+        } catch (Exception e) {
+            result = e.toString();
             return null;
         }
     }

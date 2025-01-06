@@ -15,7 +15,5 @@ public interface UserService {
 
     Users login(UserLoginRequest userLoginRequest);
 
-    Map<String, Object> jwtBulid(Long userId, String email);
-
     void loginRecord(Long userId ,HttpServletRequest request);
 }

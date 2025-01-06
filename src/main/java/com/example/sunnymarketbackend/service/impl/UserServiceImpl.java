@@ -100,11 +100,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<String, Object> jwtBulid(Long userId, String email) {
-        return jwtUtil.generateToken(userId, email);
-    }
-
-    @Override
     public void loginRecord(Long userId, HttpServletRequest request) {
 
         String ipAddress = request.getHeader("X-Forwarded-For");

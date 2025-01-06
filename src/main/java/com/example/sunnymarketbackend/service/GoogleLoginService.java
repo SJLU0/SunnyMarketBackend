@@ -1,6 +1,6 @@
 package com.example.sunnymarketbackend.service;
 
-import com.example.sunnymarketbackend.dto.GoogleUserData;
+import com.example.sunnymarketbackend.dto.GoogleUserDataResponse;
 
 import java.util.Map;
 
@@ -8,6 +8,6 @@ public interface GoogleLoginService {
 
     Map<String,Object> buildAuthUrl();
 
-    GoogleUserData googleLogin(String code);
+    GoogleUserDataResponse googleLogin(String code);
 
 }
