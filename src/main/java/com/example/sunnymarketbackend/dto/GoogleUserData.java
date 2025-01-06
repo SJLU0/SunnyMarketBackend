@@ -22,6 +22,9 @@ public class GoogleUserData {
 
     private String picture;
 
+    @JsonProperty("refresh_token")
+    private String refreshToken;
+
     public String getProviderId() {
         return providerId;
     }
@@ -76,5 +79,13 @@ public class GoogleUserData {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

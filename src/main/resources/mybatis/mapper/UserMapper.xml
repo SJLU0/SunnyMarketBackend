@@ -30,8 +30,34 @@
 
     <!--註冊-->
     <insert id="createUser" parameterType="com.example.sunnymarketbackend.entity.Users" useGeneratedKeys="true" keyProperty="userId">
-        INSERT INTO user_profile (email, password, username, address, phone_number, birthday, created_date, last_modified_date, reset_token, reset_token_expiration)
-        VALUES (#{email}, #{password}, #{username}, #{address}, #{phoneNumber}, #{birthday}, #{createdDate}, #{lastModifiedDate}, #{resetToken}, #{resetTokenExpiration})
+        INSERT INTO user_profile
+            (email,
+             password,
+             username,
+             address,
+             phone_number,
+             birthday,
+             created_date,
+             last_modified_date,
+             reset_token,
+             reset_token_expiration,
+             provider,
+             provider_id,
+             refresh_token)
+        VALUES
+            (#{email},
+             #{password},
+             #{username},
+             #{address},
+             #{phoneNumber},
+             #{birthday},
+             #{createdDate},
+             #{lastModifiedDate},
+             #{resetToken},
+             #{resetTokenExpiration},
+             #{provider},
+             #{providerId},
+             #{refreshToken})
     </insert>
 
     <insert id="addLoginRecordToUserId" parameterType="com.example.sunnymarketbackend.entity.LoginRecord" useGeneratedKeys="true">

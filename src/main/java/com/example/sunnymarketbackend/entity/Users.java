@@ -27,6 +27,12 @@ public class Users {
 
     private LocalDateTime resetTokenExpiration;
 
+    private String provider;
+
+    private String providerId;
+
+    private String refreshToken;
+
     public Long getUserId() {
         return userId;
     }
@@ -113,5 +119,29 @@ public class Users {
 
     public void setResetTokenExpiration(LocalDateTime resetTokenExpiration) {
         this.resetTokenExpiration = resetTokenExpiration;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }
