@@ -19,6 +19,9 @@ public class GoogleAccessTokenResponse {
     @JsonProperty("id_token")
     private String idToken;
 
+    @JsonProperty("refresh_token")
+    private String refreshToken;
+
     public String getAccessToken() {
         return accessToken;
     }
@@ -57,5 +60,13 @@ public class GoogleAccessTokenResponse {
 
     public void setIdToken(String idToken) {
         this.idToken = idToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }
