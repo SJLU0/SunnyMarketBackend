@@ -1,8 +1,10 @@
 package com.example.sunnymarketbackend.service.impl;
 
+import com.example.sunnymarketbackend.dao.RoleDao;
 import com.example.sunnymarketbackend.dao.UserDao;
 import com.example.sunnymarketbackend.dto.GoogleAccessTokenResponse;
 import com.example.sunnymarketbackend.dto.GoogleUserDataResponse;
+import com.example.sunnymarketbackend.entity.Role;
 import com.example.sunnymarketbackend.entity.Users;
 import com.example.sunnymarketbackend.service.GoogleLoginService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -30,6 +33,9 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private RoleDao roleDao;
 
     @Value("${google.auth.url}")
     private String GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
@@ -100,6 +106,7 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
         }
     }
 
+    @Transactional
     private Users getGoogleUserByAccessToken(GoogleAccessTokenResponse googleAccessTokenResponse) {
         RestTemplate restTemplate = new RestTemplate();
 
@@ -134,8 +141,10 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
                 newUser.setRefreshToken(googleAccessTokenResponse.getRefreshToken());
                 newUser.setCreatedDate(LocalDateTime.now());
                 newUser.setLastModifiedDate(LocalDateTime.now());
-
                 userDao.createUser(newUser);
+
+                Role normalRole = roleDao.getRoleByName("ROLE_USER");
+                userDao.addRoleForUserId(newUser.getUserId(), normalRole.getRoleId());
             }
 
             return users;

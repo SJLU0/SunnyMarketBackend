@@ -37,11 +37,11 @@ public class JwtUtil {
         return claimsResolver.apply(claims);  // 根據提供的 claimsResolver 函數提取具體聲明
     }
 
-    // 生成 JWT 的具體方法，包含額外的聲明（extraClaims）和 email 作為主體
-    //TODO 加入權限
-    public Map<String, Object> generateToken(Long userId, String email) {
+
+    public Map<String, Object> generateToken(Long userId, String email, String role) {
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("userId", userId);
+        extraClaims.put("role", role);
         String jwt = Jwts
                 .builder()
                 .setClaims(extraClaims)  // 設定額外聲明

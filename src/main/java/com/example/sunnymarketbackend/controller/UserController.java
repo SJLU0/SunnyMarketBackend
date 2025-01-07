@@ -5,6 +5,7 @@ import com.example.sunnymarketbackend.dto.UserLoginRequest;
 import com.example.sunnymarketbackend.dto.UserRegisterRequest;
 import com.example.sunnymarketbackend.dto.UserUpadteRequest;
 import com.example.sunnymarketbackend.entity.LoginRecord;
+import com.example.sunnymarketbackend.entity.Role;
 import com.example.sunnymarketbackend.entity.Users;
 import com.example.sunnymarketbackend.security.JwtUtil;
 import com.example.sunnymarketbackend.service.UserService;
@@ -50,8 +51,10 @@ public class UserController {
 
         if(user != null) {
             userService.loginRecord(user.getUserId() ,request);
-            Map token = jwtUtil.generateToken(user.getUserId(), user.getEmail());
+            List<Role> role = userService.getRoleByUserId(user.getUserId());
+            Map token = jwtUtil.generateToken(user.getUserId(), user.getEmail(), role.get(0).getRoleName());
             token.put("message", "登入成功，請稍後 login wating...");
+            token.put("role", role.get(0).getRoleName());
             return ResponseEntity.status(HttpStatus.OK).body(token);
         }else{
             ErrorMessage errorMessage = new ErrorMessage();
@@ -60,7 +63,6 @@ public class UserController {
         }
     }
 
-    //TODO 修改使用者資料
     @PostMapping("/updateUesr/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable Long userId,
                                        @RequestBody UserUpadteRequest userUpadteRequest){
