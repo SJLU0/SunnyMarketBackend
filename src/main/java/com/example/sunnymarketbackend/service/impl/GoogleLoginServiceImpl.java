@@ -62,10 +62,10 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
     }
 
     @Override
-    public GoogleUserDataResponse googleLogin(String code) {
+    public Users googleLogin(String code) {
         GoogleAccessTokenResponse googleAccessTokenResponse = getAccessToken(code);
-        GoogleUserDataResponse userInfo = getGoogleUserByAccessToken(googleAccessTokenResponse);
-        return userInfo;
+        Users user = getGoogleUserByAccessToken(googleAccessTokenResponse);
+        return user;
     }
 
     private GoogleAccessTokenResponse getAccessToken(String code) {
@@ -100,7 +100,7 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
         }
     }
 
-    private GoogleUserDataResponse getGoogleUserByAccessToken(GoogleAccessTokenResponse googleAccessTokenResponse) {
+    private Users getGoogleUserByAccessToken(GoogleAccessTokenResponse googleAccessTokenResponse) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -138,7 +138,7 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
                 userDao.createUser(newUser);
             }
 
-            return googleUserData;
+            return users;
         } catch (Exception e) {
             e.printStackTrace();
             return null;

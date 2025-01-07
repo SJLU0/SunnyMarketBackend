@@ -80,7 +80,7 @@
             record_id,
             login_time,
             ip_address,
-            os_naem,
+            os_name,
             browser
         FROM
             login_record_table
