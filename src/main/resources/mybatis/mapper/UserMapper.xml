@@ -88,4 +88,15 @@
             user_id = #{userId}
     </select>
 
+    <update id="updateUser" parameterType="com.example.sunnymarketbackend.entity.Users">
+        UPDATE user_profile
+        SET
+            username = #{username},
+            address = #{address},
+            phone_number = #{phoneNumber},
+            birthday = #{birthday},
+            last_modified_date = #{lastModifiedDate}
+        WHERE user_id = #{userId}
+    </update>
+
 </mapper>
