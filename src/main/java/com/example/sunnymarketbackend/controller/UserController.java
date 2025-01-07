@@ -3,6 +3,7 @@ package com.example.sunnymarketbackend.controller;
 import com.example.sunnymarketbackend.dto.ErrorMessage;
 import com.example.sunnymarketbackend.dto.UserLoginRequest;
 import com.example.sunnymarketbackend.dto.UserRegisterRequest;
+import com.example.sunnymarketbackend.dto.UserUpadteRequest;
 import com.example.sunnymarketbackend.entity.LoginRecord;
 import com.example.sunnymarketbackend.entity.Users;
 import com.example.sunnymarketbackend.security.JwtUtil;
@@ -29,7 +30,7 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @GetMapping("/loginRecord/{userId}")
-    public ResponseEntity<?> loginRecord(@PathVariable Long userId) {
+    public ResponseEntity<List<LoginRecord>> loginRecord(@PathVariable Long userId) {
         List<LoginRecord> loginRecordList = userService.getLoginRecordByUserId(userId);
         return ResponseEntity.status(HttpStatus.OK).body(loginRecordList);
     }
@@ -57,5 +58,14 @@ public class UserController {
             errorMessage.setMessage("登入失敗，帳號或密碼錯誤");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
         }
+    }
+
+    //TODO 修改使用者資料
+    @PostMapping("/updateUesr/{userId}")
+    public ResponseEntity<?> updateUser(@PathVariable Long userId,
+                                       @RequestBody UserUpadteRequest userUpadteRequest){
+        userUpadteRequest.setUserId(userId);
+        userService.updateUser(userUpadteRequest);
+        return ResponseEntity.status(HttpStatus.OK).body("更新成功");
     }
 }

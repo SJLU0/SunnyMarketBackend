@@ -1,6 +1,7 @@
 package com.example.sunnymarketbackend.service.impl;
 
 import com.example.sunnymarketbackend.dao.RoleDao;
+import com.example.sunnymarketbackend.dto.UserUpadteRequest;
 import com.example.sunnymarketbackend.entity.LoginRecord;
 import com.example.sunnymarketbackend.entity.Role;
 import com.example.sunnymarketbackend.security.JwtUtil;
@@ -24,7 +25,6 @@ import ua_parser.Parser;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -120,5 +120,19 @@ public class UserServiceImpl implements UserService {
 
     public List<LoginRecord> getLoginRecordByUserId(Long userId) {
         return userDao.getLoginRecordByUserId(userId);
+    }
+
+    @Override
+    public void updateUser(UserUpadteRequest userUpadteRequest) {
+
+        Users users = new Users();
+        users.setUserId(userUpadteRequest.getUserId());
+        users.setUsername(userUpadteRequest.getUsername());
+        users.setAddress(userUpadteRequest.getAddress());
+        users.setPhoneNumber(userUpadteRequest.getPhoneNumber());
+        users.setBirthday(userUpadteRequest.getBirthday());
+        users.setLastModifiedDate(LocalDateTime.now());
+
+        userDao.updateUser(users);
     }
 }

@@ -23,4 +23,6 @@ public interface UserDao {
     void addLoginRecordToUserId(LoginRecord loginRecord);
 
     List<LoginRecord> getLoginRecordByUserId(Long userId);
+
+    void updateUser(Users users);
 }
