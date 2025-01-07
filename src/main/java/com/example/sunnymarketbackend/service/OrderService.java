@@ -7,7 +7,7 @@ import com.github.pagehelper.PageInfo;
 public interface OrderService {
 
     //查詢所有訂單 
-    PageInfo<Order> getAllOrders(Long userId, Integer pageNum, Integer pageSize, String sort, String order);
+    PageInfo<Order> getAllOrders(OrderRequest params);
     //創建訂單
     Long createOrder(Long userId, OrderRequest orderRequest);
     //查詢訂單

@@ -18,16 +18,22 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
-
-    //查詢訂單
-    @GetMapping("/{userId}/getAllOrders")
+    //
+    //後台查詢所有訂單&明細
+    @GetMapping("/getAllOrders")
     public ResponseEntity<PageInfo<Order>> getAllOrders(
-            @PathVariable Long userId,
+            @RequestParam(value = "userId", required = false) Long userId,
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "sort", defaultValue = "createdDate") String sort,
             @RequestParam(value = "order", defaultValue = "DESC") String order) {
-        PageInfo<Order> orderList = orderService.getAllOrders(userId, pageNum, pageSize, sort, order);
+            OrderRequest params = new OrderRequest();
+            params.setPageNum(pageNum);
+            params.setPageSize(pageSize);
+            params.setSort(sort);
+            params.setOrder(order);
+            params.setUserId(userId);
+        PageInfo<Order> orderList = orderService.getAllOrders(params);
         return ResponseEntity.ok(orderList);
     }
 

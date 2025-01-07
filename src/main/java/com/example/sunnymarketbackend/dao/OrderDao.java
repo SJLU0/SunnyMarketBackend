@@ -13,7 +13,7 @@ import com.github.pagehelper.Page;
 @Mapper
 public interface OrderDao extends BaseMapper<Order> {
     // 查詢所有訂單
-    Page<Order> getAllOrders(Long userId, String sort, String order);
+    Page<Order> getAllOrders(Map<String, Object> map);
     // 查詢訂單
     Order getOrderById(Long orderId);
     // 查詢訂單明細
