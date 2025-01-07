@@ -44,11 +44,24 @@ public class OrderServiceImpl implements OrderService {
     private UserDao userDao;
 
     @Override
-	public PageInfo<Order> getAllOrders(Long userId, Integer pageNum, Integer pageSize, String sort, String order) {
+	public PageInfo<Order> getAllOrders(OrderRequest params) {
         //分頁
-        PageHelper.startPage(pageNum, pageSize);
-        //查詢訂單列表
-        Page<Order> orderList = orderDao.getAllOrders(userId, sort, order);
+        PageHelper.startPage(params.getPageNum(), params.getPageSize());
+        Map<String, Object> map = new HashMap();
+        map.put("sort", params.getSort());
+        map.put("order", params.getOrder());
+        map.put("userId", params.getUserId()); 
+        // 如果有 userId，檢查該用戶是否存在
+        if (params.getUserId() != null) {
+        Users user = userDao.getUserById(params.getUserId());
+             if (user == null) {
+                 log.warn("User not found: {}", params.getUserId());
+                 throw new RuntimeException("User not found");
+             }
+        }
+
+         //查詢訂單列表
+        Page<Order> orderList = orderDao.getAllOrders(map);
         //查詢訂單明細 
         for (Order orders : orderList) {
             Long orderId = orders.getOrderId();
@@ -132,6 +145,32 @@ public class OrderServiceImpl implements OrderService {
         orderDao.createOrderItems(orderItemList);
 
         return orderId;
+    }
+
+    @Override
+    public void deleteOrder(Long orderId) {
+        Order order = orderDao.getOrderById(orderId);
+        if (order == null) {
+            log.warn("Order not found: {}", orderId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        orderDao.deleteOrderItemsByOrderId(orderId);
+        orderDao.deleteOrder(orderId);
+      
+    }
+
+    @Override
+    public void deleteOrderItem(Long orderItemId) {
+        try {
+            orderDao.deleteOrderItem(orderItemId);
+        } 
+        catch (Exception e) {
+            log.error("Failed to delete order item: {}", orderItemId, e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
+     
     }
 
 }
