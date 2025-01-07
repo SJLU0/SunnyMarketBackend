@@ -5,6 +5,12 @@
   <select id="getAllOrders"  resultType="com.example.sunnymarketbackend.entity.Order">
     SELECT order_id, user_id, last_modified_date, total_amount, created_date
     FROM order_table 
+    <where>
+      <!--userId篩選-->
+      <if test="userId !=null">
+          AND user_id = #{userId}
+      </if>   
+    </where>
      ORDER BY
         ${sort != null and (sort == 'created_date') ? sort : 'created_date'}
         ${order != null and (order == 'ASC' or order == 'DESC') ? order : 'DESC'}
@@ -14,7 +20,7 @@
   <select id="getOrderById" parameterType="long" resultType="com.example.sunnymarketbackend.entity.Order">
     SELECT order_id, user_id, last_modified_date, total_amount, created_date
     FROM order_table 
-    WHERE order_id = #{orderId}
+    WHERE order_id = #{orderId} 
   </select>
   
   <!-- 查詢訂單明細 -->
@@ -39,4 +45,22 @@
       (#{item.orderId}, #{item.productId}, #{item.quantity}, #{item.amount})
     </foreach>
   </insert>
+  <!-- 刪除訂單明細 -->
+  <delete id="deleteOrderItemsByOrderId" parameterType="long">
+      DELETE FROM order_item_table
+      WHERE order_id = #{orderId}
+  </delete>
+
+  <!-- 刪除訂單 -->
+  <delete id="deleteOrder" parameterType="long">
+      DELETE FROM order_table
+      WHERE order_id = #{orderId}
+  </delete>
+  <!-- 刪除單筆訂單明細 -->
+  <delete id="deleteOrderItem" parameterType="long">
+      DELETE FROM order_item_table
+      WHERE order_item_id = #{orderItemId}
+  </delete>  
+
+
 </mapper>

@@ -18,16 +18,22 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
-
-    //查詢訂單
-    @GetMapping("/{userId}/getAllOrders")
+    //
+    //後台查詢所有訂單&明細
+    @GetMapping("/getAllOrders")
     public ResponseEntity<PageInfo<Order>> getAllOrders(
-            @PathVariable Long userId,
+            @RequestParam(value = "userId", required = false) Long userId,
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "sort", defaultValue = "createdDate") String sort,
             @RequestParam(value = "order", defaultValue = "DESC") String order) {
-        PageInfo<Order> orderList = orderService.getAllOrders(userId, pageNum, pageSize, sort, order);
+            OrderRequest params = new OrderRequest();
+            params.setPageNum(pageNum);
+            params.setPageSize(pageSize);
+            params.setSort(sort);
+            params.setOrder(order);
+            params.setUserId(userId);
+        PageInfo<Order> orderList = orderService.getAllOrders(params);
         return ResponseEntity.ok(orderList);
     }
 
@@ -41,6 +47,30 @@ public class OrderController {
         Order order = orderService.getOrderById(orderId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(order);
+    }
+    //刪除訂單與訂單明細
+    @DeleteMapping("{userId}/{orderId}")
+    public ResponseEntity<?> deleteOrder(@PathVariable Long userId, @PathVariable Long orderId) {
+       try{
+        orderService.deleteOrder(orderId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+       }
+       catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("刪除訂單失敗" + e.getMessage());
+       }
+        
+    }
+    //刪除單筆訂單明細
+    @DeleteMapping("{userId}/{orderId}/orderItems/{orderItemId}")
+    public ResponseEntity<?> deleteOrderItem(@PathVariable Long userId, @PathVariable Long orderId, @PathVariable Long orderItemId) {
+       try {
+        orderService.deleteOrderItem(orderItemId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        
+       } 
+       catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("刪除訂單明細失敗" + e.getMessage());
+        }
     }
 
 }
