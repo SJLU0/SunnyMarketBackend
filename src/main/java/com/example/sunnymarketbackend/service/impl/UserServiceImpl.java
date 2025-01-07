@@ -40,6 +40,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Override
+    public List<Role> getRoleByUserId(Long userId) {
+        List<Role> role = userDao.getRoleByUserId(userId);
+        return role;
+    }
+
     @Transactional
     @Override
     public Long register(UserRegisterRequest userRegisterRequest) {
