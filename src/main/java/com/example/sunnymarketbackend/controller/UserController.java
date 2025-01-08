@@ -53,7 +53,7 @@ public class UserController {
             userService.loginRecord(user.getUserId() ,request);
             List<Role> role = userService.getRoleByUserId(user.getUserId());
             Map token = jwtUtil.generateToken(user.getUserId(), user.getEmail(), role.get(0).getRoleName());
-            token.put("message", "登入成功，請稍後 login wating...");
+            token.put("message", "登入成功，請稍後 login waiting...");
             token.put("role", role.get(0).getRoleName());
             return ResponseEntity.status(HttpStatus.OK).body(token);
         }else{
