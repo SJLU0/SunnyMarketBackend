@@ -99,4 +99,15 @@
         WHERE user_id = #{userId}
     </update>
 
+    <select id = "getAllUsers" parameterType="com.example.sunnymarketbackend.entity.Users">
+        SELECT
+            username,
+            email
+        FROM user_profile
+        <where>
+            <if test="search != null and search.trim() != '' ">
+                AND email LIKE CONCAT('%', #{search}, '%')
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -9,6 +9,7 @@ import com.example.sunnymarketbackend.entity.Role;
 import com.example.sunnymarketbackend.entity.Users;
 import com.example.sunnymarketbackend.security.JwtUtil;
 import com.example.sunnymarketbackend.service.UserService;
+import com.github.pagehelper.PageInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,5 +70,13 @@ public class UserController {
         userUpadteRequest.setUserId(userId);
         userService.updateUser(userUpadteRequest);
         return ResponseEntity.status(HttpStatus.OK).body("更新成功");
+    }
+
+    @GetMapping("/getAllUsers")
+    public ResponseEntity<PageInfo<Users>> getAllUsers(@RequestParam(defaultValue = "1") Integer pageNum,
+                                                        @RequestParam(defaultValue = "10") Integer pageSize,
+                                                        @RequestParam(required = false) String search) {
+        PageInfo<Users> userList = userService.getAllUsers(pageNum, pageSize,search);
+        return ResponseEntity.status(HttpStatus.OK).body(userList);
     }
 }

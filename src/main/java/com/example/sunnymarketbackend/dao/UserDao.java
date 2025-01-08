@@ -25,4 +25,6 @@ public interface UserDao {
     List<LoginRecord> getLoginRecordByUserId(Long userId);
 
     void updateUser(Users users);
+
+    List<Users> getAllUsers(String search);
 }

@@ -1,23 +1,13 @@
 package com.example.sunnymarketbackend.service.impl;
 
-
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.example.sunnymarketbackend.constant.ProductCategory;
 import com.example.sunnymarketbackend.dto.ProductQueryParams;
 import com.example.sunnymarketbackend.dto.ProductRequest;
-
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.example.sunnymarketbackend.constant.ProductCategory;
 import com.example.sunnymarketbackend.dao.ProductDao;
-import com.example.sunnymarketbackend.dto.ProductRequest;
 import com.example.sunnymarketbackend.entity.Product;
 import com.example.sunnymarketbackend.service.ProductService;
 import com.github.pagehelper.Page;
