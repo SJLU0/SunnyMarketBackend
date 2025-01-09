@@ -68,7 +68,7 @@ public class OpenAiServiceImpl implements OpenAiService {
 
     private String buildRequestBody(UserQuestionRequest userQuestionRequest) {
         return "{\n" +
-                "  \"model\": \"gpt-4omini\",\n" +
+                "  \"model\": \"gpt-4o\",\n" +
                 "  \"messages\": [\n" +
                 "    {\"role\": \"system\", \"content\": \"You are a professional e-commerce assistant specializing in product recommendations, order issue resolutions, and helping users make shopping decisions. Based on user queries, browsing history, shopping preferences, and provided data, give personalized and specific advice. Responses should be concise, direct, and avoid being overly templated. If the question is beyond your scope, respond: 'This question is outside my scope of service. Please contact a relevant professional.'\"},\n" +
                 "    {\"role\": \"user\", \"content\": \"" + userQuestionRequest.getUserAsk() + "\"},\n" +
