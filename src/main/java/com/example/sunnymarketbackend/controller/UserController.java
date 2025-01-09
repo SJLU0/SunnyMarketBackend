@@ -9,6 +9,7 @@ import com.example.sunnymarketbackend.entity.Role;
 import com.example.sunnymarketbackend.entity.Users;
 import com.example.sunnymarketbackend.security.JwtUtil;
 import com.example.sunnymarketbackend.service.UserService;
+import com.github.pagehelper.PageInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class UserController {
             userService.loginRecord(user.getUserId(), request);
             List<Role> role = userService.getRoleByUserId(user.getUserId());
             Map token = jwtUtil.generateToken(user.getUserId(), user.getEmail(), role.get(0).getRoleName());
-            token.put("message", "登入成功，請稍後 login wating...");
+            token.put("message", "登入成功，請稍後 login waiting...");
             token.put("role", role.get(0).getRoleName());
             return ResponseEntity.status(HttpStatus.OK).body(token);
         } else {
@@ -78,5 +79,13 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+
+    @GetMapping("/getAllUsers")
+    public ResponseEntity<PageInfo<Users>> getAllUsers(@RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(required = false) String search) {
+        PageInfo<Users> userList = userService.getAllUsers(pageNum, pageSize, search);
+        return ResponseEntity.status(HttpStatus.OK).body(userList);
+
     }
 }

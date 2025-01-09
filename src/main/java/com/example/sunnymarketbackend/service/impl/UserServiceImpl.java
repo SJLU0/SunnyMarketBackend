@@ -4,9 +4,9 @@ import com.example.sunnymarketbackend.dao.RoleDao;
 import com.example.sunnymarketbackend.dto.UserUpadteRequest;
 import com.example.sunnymarketbackend.entity.LoginRecord;
 import com.example.sunnymarketbackend.entity.Role;
-import com.example.sunnymarketbackend.security.JwtUtil;
 import com.example.sunnymarketbackend.service.UserService;
-
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.example.sunnymarketbackend.dao.UserDao;
 import com.example.sunnymarketbackend.dto.UserLoginRequest;
 import com.example.sunnymarketbackend.dto.UserRegisterRequest;
@@ -145,5 +145,12 @@ public class UserServiceImpl implements UserService {
         users.setLastModifiedDate(LocalDateTime.now());
 
         userDao.updateUser(users);
+    }
+
+    @Override
+    public PageInfo<Users> getAllUsers(Integer pageNum, Integer pageSize, String search) {
+        PageHelper.startPage(pageNum,pageSize);
+        List<Users> userList = userDao.getAllUsers(search);
+        return new  PageInfo<>(userList);
     }
 }

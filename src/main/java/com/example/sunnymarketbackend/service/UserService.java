@@ -6,10 +6,9 @@ import com.example.sunnymarketbackend.dto.UserUpadteRequest;
 import com.example.sunnymarketbackend.entity.LoginRecord;
 import com.example.sunnymarketbackend.entity.Role;
 import com.example.sunnymarketbackend.entity.Users;
+import com.github.pagehelper.PageInfo;
 import jakarta.servlet.http.HttpServletRequest;
-
 import java.util.List;
-import java.util.Map;
 
 public interface UserService {
 
@@ -26,4 +25,6 @@ public interface UserService {
     void updateUser(UserUpadteRequest userUpadteRequest);
 
     List<Role> getRoleByUserId(Long userId);
+
+    PageInfo<Users> getAllUsers(Integer pageNum, Integer pageSize, String search);
 }

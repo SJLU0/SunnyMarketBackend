@@ -9,13 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cglib.core.internal.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.springframework.security.config.Elements.JWT;
 
 @Component
 public class JwtUtil {
