@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -49,25 +48,35 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody @Valid UserLoginRequest userLoginRequest, HttpServletRequest request) {
         Users user = userService.login(userLoginRequest);
 
-        if(user != null) {
-            userService.loginRecord(user.getUserId() ,request);
+        if (user != null) {
+            userService.loginRecord(user.getUserId(), request);
             List<Role> role = userService.getRoleByUserId(user.getUserId());
             Map token = jwtUtil.generateToken(user.getUserId(), user.getEmail(), role.get(0).getRoleName());
             token.put("message", "登入成功，請稍後 login wating...");
             token.put("role", role.get(0).getRoleName());
             return ResponseEntity.status(HttpStatus.OK).body(token);
-        }else{
+        } else {
             ErrorMessage errorMessage = new ErrorMessage();
             errorMessage.setMessage("登入失敗，帳號或密碼錯誤");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
         }
     }
 
-    @PostMapping("/updateUesr/{userId}")
+    @PutMapping("/updateUser/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable Long userId,
-                                       @RequestBody UserUpadteRequest userUpadteRequest){
+            @RequestBody UserUpadteRequest userUpadteRequest) {
         userUpadteRequest.setUserId(userId);
         userService.updateUser(userUpadteRequest);
         return ResponseEntity.status(HttpStatus.OK).body("更新成功");
+    }
+
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<Users> getUserProfile(@PathVariable Long userId) {
+        Users user = userService.getUserById(userId);
+        if (user != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 }
