@@ -100,9 +100,11 @@ public class OrderServiceImpl implements OrderService {
             if (product == null) {
                 log.warn("Product not found: {}", buyItem.getProductId());
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-            } else if (product.getStock() < buyItem.getQuantity()) {
+            } else if (product.getStock() < buyItem.getQuantity())  {
                 log.warn("Product stock is not enough: {}, {}", buyItem.getProductId(), product.getStock(), buyItem.getQuantity());
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, 
+                    String.format("商品庫存不足。庫存：%d", 
+                    product.getStock()));
             }
             //扣除商品庫存
             productDao.updateStock(product.getProductId(), product.getStock() - buyItem.getQuantity(),LocalDateTime.now());
