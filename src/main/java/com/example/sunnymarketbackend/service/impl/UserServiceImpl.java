@@ -49,10 +49,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public Long register(UserRegisterRequest userRegisterRequest) {
-        //檢查註冊 email
+        // 檢查註冊 email
         Users user = userDao.getUserByEmail(userRegisterRequest.getEmail());
-        if(user != null){
-            //使用 {} 表示變數
+        if (user != null) {
+            // 使用 {} 表示變數
             log.warn("該 email {} 已被註冊", userRegisterRequest.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
         newUser.setCreatedDate(LocalDateTime.now());
         newUser.setLastModifiedDate(LocalDateTime.now());
 
-        //創建帳號
+        // 創建帳號
         userDao.createUser(newUser);
 
         Role normalRole = roleDao.getRoleByName("ROLE_USER");
@@ -81,25 +81,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Users getUserById(Long userId) {
-        return userDao.getUserById(userId);
+        Users user = userDao.getUserById(userId);
+
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        return user;
     }
 
     @Override
     public Users login(UserLoginRequest userLoginRequest) {
         Users user = userDao.getUserByEmail(userLoginRequest.getEmail());
 
-        //檢查 User 是否存在
-        if(user == null){
+        // 檢查 User 是否存在
+        if (user == null) {
             log.warn("該 email {} 尚未註冊", userLoginRequest.getEmail());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST); //強制停止請求
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST); // 強制停止請求
         }
 
-        //比較明文密碼與資料庫加密密碼 密碼正確 return user
-        if(passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword())){ //如果前端傳來的值與資料庫一致
+        // 比較明文密碼與資料庫加密密碼 密碼正確 return user
+        if (passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword())) { // 如果前端傳來的值與資料庫一致
             return user;
-        }else{
+        } else {
             log.warn("email {} 的密碼不正確", userLoginRequest.getEmail());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST); //強制停止請求
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST); // 強制停止請求
         }
     }
 
