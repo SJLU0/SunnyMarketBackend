@@ -1,9 +1,12 @@
 package com.example.sunnymarketbackend.service.impl;
 
+import com.example.sunnymarketbackend.dao.OpenAiDao;
 import com.example.sunnymarketbackend.dto.AiResponse;
 import com.example.sunnymarketbackend.dto.UserQuestionRequest;
+import com.example.sunnymarketbackend.entity.OpenAi;
 import com.example.sunnymarketbackend.service.OpenAiService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,9 @@ import java.util.Map;
 @Service
 public class OpenAiServiceImpl implements OpenAiService {
 
+    @Autowired
+    private OpenAiDao openAiDao;
+
     @Value("${openai.api.key}")
     private String apiKey;
 
@@ -27,7 +33,8 @@ public class OpenAiServiceImpl implements OpenAiService {
     private String apiURL;
 
     @Override
-    public AiResponse openAiConnection(UserQuestionRequest userQuestionRequest) {
+    public AiResponse openAiConnection(Long userId,
+                                       UserQuestionRequest userQuestionRequest) {
 
         try {
             String requestBody = buildRequestBody(userQuestionRequest);
@@ -37,6 +44,15 @@ public class OpenAiServiceImpl implements OpenAiService {
 
             // 處理 OpenAI API 回應
             String responseContent = parseResponse(responseBody);
+
+            OpenAi openAi = new OpenAi();
+            openAi.setUserId(userId);
+            openAi.setAiRespond(responseContent);
+            openAi.setUserAsk(userQuestionRequest.getUserAsk());
+            openAi.setCreateDate(LocalDateTime.now());
+
+            openAiDao.createAiRepondUserQusent(openAi);
+
             AiResponse aiResponse = new AiResponse();
             aiResponse.setAiRepond(responseContent);
 
@@ -54,15 +70,9 @@ public class OpenAiServiceImpl implements OpenAiService {
         return "{\n" +
                 "  \"model\": \"gpt-4o\",\n" +
                 "  \"messages\": [\n" +
-                "    {\"role\": \"system\", \"content\": \"你是一名理財專員，知道所有財務金融相關知識。你將根據使用者的具體問題，以及財務數據、過去的對話紀錄來提供具體且個性化的財務建議。" +
-                "請根據上下文進行具體回答，避免使用過於模板化的回應，請根據所有的資料來量身定制建議，避免重複回應已分析過的財務數據或問題，但請參考過去的問題和回答，進行前後呼應的回應。" +
-                "根據使用者的財務狀況，提出理財建議。若使用者問非財務、金融、投資相關問題，請回應「此問題超出我的工作範圍，請諮詢相關領域人士」。若發現財務數據異常，請主動提醒用戶，並建議財務規劃以及數據異常猜測。" +
-                "提供財務規劃時，請具體到行動步驟，並以正面鼓勵語句結尾。限制字數為50字。\"},\n" +
-                "    {\"role\": \"user\", \"content\": \"這是我最近的財務摘要：\\n" +
-                "      - 日期: " + LocalDateTime.now() + "\\n" +
-                "    \"},\n" +
-                "    {\"role\": \"user\", \"content\": \"" + userQuestionRequest.getUserAsk() + "\"},\n" +  // 將具體問題加入
-                "    {\"role\": \"assistant\", \"content\": \"請針對具體問題回應。\"}\n" +  // 指導 AI 生成具體回應
+                "    {\"role\": \"system\", \"content\": \"You are a professional e-commerce assistant specializing in product recommendations, order issue resolutions, and helping users make shopping decisions. Based on user queries, browsing history, shopping preferences, and provided data, give personalized and specific advice. Responses should be concise, direct, and avoid being overly templated. If the question is beyond your scope, respond: 'This question is outside my scope of service. Please contact a relevant professional.'\"},\n" +
+                "    {\"role\": \"user\", \"content\": \"" + userQuestionRequest.getUserAsk() + "\"},\n" +
+                "    {\"role\": \"assistant\", \"content\": \"Please provide product suggestions based on the user's needs and data.\"}\n" +
                 "  ]\n" +
                 "}";
     }

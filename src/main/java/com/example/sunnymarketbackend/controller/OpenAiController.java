@@ -18,7 +18,7 @@ public class OpenAiController {
     @PostMapping("/{userId}/chet")
     public ResponseEntity<?> aiChet(@PathVariable Long userId,
                                     @RequestBody UserQuestionRequest userQuestionRequest) {
-        AiResponse aiResponse = openAiService.openAiConnection(userQuestionRequest);
+        AiResponse aiResponse = openAiService.openAiConnection(userId, userQuestionRequest);
         return ResponseEntity.status(HttpStatus.OK).body(aiResponse);
     }
 }

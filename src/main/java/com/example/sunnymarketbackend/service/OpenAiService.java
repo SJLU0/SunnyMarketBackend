@@ -5,6 +5,6 @@ import com.example.sunnymarketbackend.dto.UserQuestionRequest;
 
 public interface OpenAiService {
 
-    AiResponse openAiConnection(UserQuestionRequest userQuestionRequest);
+    AiResponse openAiConnection(Long userId, UserQuestionRequest userQuestionRequest);
 
 }
