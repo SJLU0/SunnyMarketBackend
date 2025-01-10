@@ -58,7 +58,10 @@ public class ProductServiceImpl implements ProductService {
     public void updateProduct(Long productId, ProductRequest productRequest) {
 
         // 更新產品資料
-        Product existingProduct = new Product();
+        Product existingProduct = productDao.getProductById(productId);
+        if (existingProduct == null) {
+            throw new RuntimeException("Product not found: " + productId);
+        }
 
         existingProduct.setProductId(productId);
         existingProduct.setCategory(productRequest.getCategory());
