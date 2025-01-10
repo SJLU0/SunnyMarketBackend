@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(UserUpadteRequest userUpadteRequest) {
 
-        Users users = new Users();
+        Users users = userDao.getUserById(userUpadteRequest.getUserId());
         users.setUserId(userUpadteRequest.getUserId());
         users.setUsername(userUpadteRequest.getUsername());
         users.setAddress(userUpadteRequest.getAddress());
