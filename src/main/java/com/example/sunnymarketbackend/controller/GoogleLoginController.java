@@ -53,6 +53,7 @@ public class GoogleLoginController {
         List<Role> role = userService.getRoleByUserId(user.getUserId());
         Map<String, Object> token = jwtUtil.generateToken(user.getUserId(), user.getEmail(), role.get(0).getRoleName());
         token.put("message", "登入成功");
+        token.put("role", role.get(0).getRoleName());
         return ResponseEntity.status(HttpStatus.OK).body(token);
     }
 }

@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class UserRegisterRequest {
 
     @Email
-    @NotBlank
+    @NotNull
     private String email;
 
     @NotBlank
@@ -21,7 +21,7 @@ public class UserRegisterRequest {
     @NotBlank
     private String address;
 
-    @NotBlank
+    @NotNull
     private String phoneNumber;
 
     @NotNull
