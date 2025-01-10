@@ -26,13 +26,15 @@ public class OrderController {
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "sort", defaultValue = "createdDate") String sort,
-            @RequestParam(value = "order", defaultValue = "DESC") String order) {
+            @RequestParam(value = "order", defaultValue = "DESC") String order,
+            @RequestParam(required = false) String search) {
             OrderRequest params = new OrderRequest();
             params.setPageNum(pageNum);
             params.setPageSize(pageSize);
             params.setSort(sort);
             params.setOrder(order);
             params.setUserId(userId);
+            params.setSearch(search);
         PageInfo<Order> orderList = orderService.getAllOrders(params);
         return ResponseEntity.ok(orderList);
     }

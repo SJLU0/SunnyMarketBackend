@@ -44,32 +44,33 @@ public class OrderServiceImpl implements OrderService {
     private UserDao userDao;
 
     @Override
-	public PageInfo<Order> getAllOrders(OrderRequest params) {
-        //分頁
+    public PageInfo<Order> getAllOrders(OrderRequest params) {
+        // 分頁
         PageHelper.startPage(params.getPageNum(), params.getPageSize());
         Map<String, Object> map = new HashMap();
         map.put("sort", params.getSort());
         map.put("order", params.getOrder());
-        map.put("userId", params.getUserId()); 
+        map.put("userId", params.getUserId());
+        map.put("search", params.getSearch());
         // 如果有 userId，檢查該用戶是否存在
         if (params.getUserId() != null) {
-        Users user = userDao.getUserById(params.getUserId());
-             if (user == null) {
-                 log.warn("User not found: {}", params.getUserId());
-                 throw new RuntimeException("User not found");
-             }
+            Users user = userDao.getUserById(params.getUserId());
+            if (user == null) {
+                log.warn("User not found: {}", params.getUserId());
+                throw new RuntimeException("User not found");
+            }
         }
 
-         //查詢訂單列表
+        // 查詢訂單列表
         Page<Order> orderList = orderDao.getAllOrders(map);
-        //查詢訂單明細 
+        // 查詢訂單明細
         for (Order orders : orderList) {
             Long orderId = orders.getOrderId();
             List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(orderId);
             orders.setOrderItemList(orderItemList);
         }
         return new PageInfo<>(orderList);
-	}
+    }
 
     @Override
     public Order getOrderById(Long orderId) {
@@ -78,37 +79,38 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderItemList(orderItemList);
         return order;
     }
-    
+
     @Transactional
     @Override
     public Long createOrder(Long userId, OrderRequest orderRequest) {
-       //檢查 User 是否存在
+        // 檢查 User 是否存在
         Users user = userDao.getUserById(userId);
         if (user == null) {
             log.warn("User not found: {}", userId);
             throw new RuntimeException("User not found");
         }
-       
+
         int totalAmount = 0;
         // 訂單明細
         List<OrderItem> orderItemList = new ArrayList<>();
         // 明細資料
         for (BuyItem buyItem : orderRequest.getBuyItemList()) {
             Product product = productDao.getProductById(buyItem.getProductId());
-            
-            //檢查product 是否存在、庫存是否足夠
+
+            // 檢查product 是否存在、庫存是否足夠
             if (product == null) {
                 log.warn("Product not found: {}", buyItem.getProductId());
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-            } else if (product.getStock() < buyItem.getQuantity())  {
-                log.warn("Product stock is not enough: {}, {}", buyItem.getProductId(), product.getStock(), buyItem.getQuantity());
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, 
-                    String.format("商品庫存不足。庫存：%d", 
-                    product.getStock()));
+            } else if (product.getStock() < buyItem.getQuantity()) {
+                log.warn("Product stock is not enough: {}, {}", buyItem.getProductId(), product.getStock(),
+                        buyItem.getQuantity());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        String.format("商品庫存不足。庫存：%d",
+                                product.getStock()));
             }
-            //扣除商品庫存
-            productDao.updateStock(product.getProductId(), product.getStock() - buyItem.getQuantity(),LocalDateTime.now());
-
+            // 扣除商品庫存
+            productDao.updateStock(product.getProductId(), product.getStock() - buyItem.getQuantity(),
+                    LocalDateTime.now());
 
             // 計算總價錢
             int amount = buyItem.getQuantity() * product.getPrice();
@@ -128,11 +130,11 @@ public class OrderServiceImpl implements OrderService {
         orderMap.put("createdDate", LocalDateTime.now());
         orderMap.put("lastModifiedDate", LocalDateTime.now());
 
-        //創建訂單
+        // 創建訂單
         orderDao.createOrder(orderMap);
-        // 1.從 orderMap 中取得 orderId 並轉換為 BigInteger 類型   
+        // 1.從 orderMap 中取得 orderId 並轉換為 BigInteger 類型
         BigInteger orderIdBigInt = (BigInteger) orderMap.get("orderId");
-        // 2.檢查是否為空 
+        // 2.檢查是否為空
         if (orderIdBigInt == null) {
             throw new RuntimeException("Failed to create order: orderId is null");
         }
@@ -159,20 +161,18 @@ public class OrderServiceImpl implements OrderService {
 
         orderDao.deleteOrderItemsByOrderId(orderId);
         orderDao.deleteOrder(orderId);
-      
+
     }
 
     @Override
     public void deleteOrderItem(Long orderItemId) {
         try {
             orderDao.deleteOrderItem(orderItemId);
-        } 
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("Failed to delete order item: {}", orderItemId, e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        
-     
+
     }
 
 }
