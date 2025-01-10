@@ -2,15 +2,15 @@ package com.example.sunnymarketbackend.dto;
 
 public class AiResponse {
 
-    private String aiRepond;
+    private String aiRespond;
     private String message;
 
-    public String getAiRepond() {
-        return aiRepond;
+    public String getAiRespond() {
+        return aiRespond;
     }
 
-    public void setAiRepond(String aiRepond) {
-        this.aiRepond = aiRepond;
+    public void setAiRespond(String aiRespond) {
+        this.aiRespond = aiRespond;
     }
 
     public String getMessage() {
