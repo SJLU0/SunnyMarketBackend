@@ -1,10 +1,13 @@
 package com.example.sunnymarketbackend.service.impl;
 
 import com.example.sunnymarketbackend.dao.OpenAiDao;
+import com.example.sunnymarketbackend.dao.ProductDao;
 import com.example.sunnymarketbackend.dto.AiResponse;
 import com.example.sunnymarketbackend.dto.UserQuestionRequest;
 import com.example.sunnymarketbackend.entity.OpenAi;
+import com.example.sunnymarketbackend.entity.Product;
 import com.example.sunnymarketbackend.service.OpenAiService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +20,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +29,9 @@ public class OpenAiServiceImpl implements OpenAiService {
 
     @Autowired
     private OpenAiDao openAiDao;
+
+    @Autowired
+    private ProductDao productDao;
 
     @Value("${openai.api.key}")
     private String apiKey;
@@ -37,7 +44,13 @@ public class OpenAiServiceImpl implements OpenAiService {
                                        UserQuestionRequest userQuestionRequest) {
 
         try {
-            String requestBody = buildRequestBody(userQuestionRequest);
+
+            Map<String, Object> map = new HashMap<>();
+            List<Product> productList = productDao.selectAllProducts(map);
+            String productListJson = bulidJson(productList);
+            System.out.println(productListJson);
+
+            String requestBody = buildRequestBody(userQuestionRequest, productListJson);
 
             // 發送請求並獲取響應
             String responseBody = sendHttpRequest(requestBody);
@@ -54,7 +67,7 @@ public class OpenAiServiceImpl implements OpenAiService {
             openAiDao.createAiRepondUserQusent(openAi);
 
             AiResponse aiResponse = new AiResponse();
-            aiResponse.setAiRepond(responseContent);
+            aiResponse.setAiRespond(responseContent);
 
             System.out.println("--------------\n" + responseContent + "\n--------------");
 
@@ -66,16 +79,19 @@ public class OpenAiServiceImpl implements OpenAiService {
         }
     }
 
-    private String buildRequestBody(UserQuestionRequest userQuestionRequest) {
+    private String buildRequestBody(UserQuestionRequest userQuestionRequest,
+                                    String productListJson) {
         return "{\n" +
-                "  \"model\": \"gpt-4o\",\n" +
+                "  \"model\": \"gpt-4o-mini\",\n" +
                 "  \"messages\": [\n" +
                 "    {\"role\": \"system\", \"content\": \"You are a professional e-commerce assistant specializing in product recommendations, order issue resolutions, and helping users make shopping decisions. Based on user queries, browsing history, shopping preferences, and provided data, give personalized and specific advice. Responses should be concise, direct, and avoid being overly templated. If the question is beyond your scope, respond: 'This question is outside my scope of service. Please contact a relevant professional.'\"},\n" +
-                "    {\"role\": \"user\", \"content\": \"" + userQuestionRequest.getUserAsk() + "\"},\n" +
-                "    {\"role\": \"assistant\", \"content\": \"Please provide product suggestions based on the user's needs and data.\"}\n" +
+                "    {\"role\": \"user\", \"content\": \"" + userQuestionRequest.getUserAsk() + "\", \"language\": \"zh-TW\"},\n" +
+                "    {\"role\": \"assistant\", \"content\": \"Please provide product recommendations based on the user's needs and data. Below is the relevant product list data:\\n" +
+                "\"}\n" +
                 "  ]\n" +
                 "}";
     }
+
 
     // 發送 HTTP 請求並返回回應
     private String sendHttpRequest(String requestBody) throws IOException, InterruptedException {
@@ -102,5 +118,23 @@ public class OpenAiServiceImpl implements OpenAiService {
             throw new RuntimeException("No choices available in the response.");
         }
         return (String) ((Map<String, Object>) choices.get(0).get("message")).get("content");
+    }
+
+    private String bulidJson(List<Product> productList){
+        StringBuilder productListJson = new StringBuilder();
+        for (Product product : productList) {
+            productListJson.append("{")
+                    .append("\"Product Name\": \"").append(product.getProductName()).append("\", ")
+                    .append("\"Price\": \"").append(product.getPrice()).append("\", ")
+                    .append("\"Description\": \"").append(product.getDescription()).append("\"")
+                    .append("}, ");
+        }
+
+        // 移除最後多餘的逗號和空格
+        if (productListJson.length() > 0) {
+            productListJson.setLength(productListJson.length() - 2);
+        }
+
+        return productListJson.toString();
     }
 }
