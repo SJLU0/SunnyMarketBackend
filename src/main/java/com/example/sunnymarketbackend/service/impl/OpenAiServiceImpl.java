@@ -20,6 +20,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,15 +82,46 @@ public class OpenAiServiceImpl implements OpenAiService {
 
     private String buildRequestBody(UserQuestionRequest userQuestionRequest,
                                     String productListJson) {
-        return "{\n" +
-                "  \"model\": \"gpt-4o-mini\",\n" +
-                "  \"messages\": [\n" +
-                "    {\"role\": \"system\", \"content\": \"You are a professional e-commerce assistant specializing in product recommendations, order issue resolutions, and helping users make shopping decisions. Based on user queries, browsing history, shopping preferences, and provided data, give personalized and specific advice. Responses should be concise, direct, and avoid being overly templated. If the question is beyond your scope, respond: 'This question is outside my scope of service. Please contact a relevant professional.'\"},\n" +
-                "    {\"role\": \"user\", \"content\": \"" + userQuestionRequest.getUserAsk() + "\", \"language\": \"zh-TW\"},\n" +
-                "    {\"role\": \"assistant\", \"content\": \"Please provide product recommendations based on the user's needs and data. Below is the relevant product list data:\\n" +
-                "\"}\n" +
-                "  ]\n" +
-                "}";
+        ObjectMapper mapper = new ObjectMapper();
+
+        // 建立主結構
+        Map<String, Object> json = new HashMap<>();
+        json.put("model", "gpt-4o-mini");
+
+        // 建立 messages 陣列
+        List<Map<String, String>> messages = new ArrayList<>();
+
+        // 系統訊息
+        Map<String, String> systemMessage = new HashMap<>();
+        systemMessage.put("role", "system");
+        systemMessage.put("content", "您是一名專業的電商助理，專門提供商品推薦、訂單問題解決，並幫助用戶做出購物決策。根據用戶的提問、瀏覽記錄、購物偏好和提供的數據，給出個性化且具體的建議。回覆應該簡潔、直接，避免過於模板化。如果問題超出您的服務範圍，請回覆：「這個問題超出了我的服務範圍，請聯繫相關專業人士。」");
+        messages.add(systemMessage);
+
+        // 使用者訊息
+        Map<String, String> userMessage = new HashMap<>();
+        userMessage.put("role", "user");
+        userMessage.put("content", userQuestionRequest.getUserAsk());
+        userMessage.put("language", "zh-TW");
+        messages.add(userMessage);
+
+        // 助理訊息
+        Map<String, String> assistantMessage = new HashMap<>();
+        assistantMessage.put("role", "assistant");
+        assistantMessage.put("content", "請根據用戶的需求和數據提供商品推薦。以下是相關的商品清單數據：");
+        messages.add(assistantMessage);
+
+        // 組裝 JSON
+        json.put("messages", messages);
+
+        // 生成 JSON 字串
+        try{
+            String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+            System.out.println(jsonString);
+            return jsonString;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
