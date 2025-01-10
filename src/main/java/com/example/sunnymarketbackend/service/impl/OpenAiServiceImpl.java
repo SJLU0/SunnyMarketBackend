@@ -49,7 +49,6 @@ public class OpenAiServiceImpl implements OpenAiService {
             Map<String, Object> map = new HashMap<>();
             List<Product> productList = productDao.selectAllProducts(map);
             String productListJson = bulidJson(productList);
-            System.out.println(productListJson);
 
             String requestBody = buildRequestBody(userQuestionRequest, productListJson);
 
@@ -107,7 +106,7 @@ public class OpenAiServiceImpl implements OpenAiService {
         // 助理訊息
         Map<String, String> assistantMessage = new HashMap<>();
         assistantMessage.put("role", "assistant");
-        assistantMessage.put("content", "請根據用戶的需求和數據提供商品推薦。以下是相關的商品清單數據：");
+        assistantMessage.put("content", "請根據用戶的需求和數據提供商品推薦。以下是相關的商品清單數據：" + productListJson);
         messages.add(assistantMessage);
 
         // 組裝 JSON
