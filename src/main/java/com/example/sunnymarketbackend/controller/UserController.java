@@ -84,7 +84,7 @@ public class UserController {
     @GetMapping("/getAllUsers")
     public ResponseEntity<PageInfo<Users>> getAllUsers(@RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "10") Integer pageSize,
-            @RequestParam(required = false) String search) {
+            @RequestParam(required = false) String search) { //required非必要輸入
         PageInfo<Users> userList = userService.getAllUsers(pageNum, pageSize, search);
         return ResponseEntity.status(HttpStatus.OK).body(userList);
 
