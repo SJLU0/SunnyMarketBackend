@@ -31,16 +31,6 @@ public class GoogleLoginController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    private String GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
-
-    private String GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
-
-    @Value("${spring.security.oauth2.client.registration.google.client-id}")
-    private String clientId;
-
-    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
-    private String clientSecret;
-
     @GetMapping("/buildAuthUrl")
     public ResponseEntity<Map<String, Object>> buildAuthUrl() {
         Map<String, Object> urlMap = googleLoginService.buildAuthUrl();
