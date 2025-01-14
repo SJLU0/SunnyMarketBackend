@@ -7,6 +7,7 @@ import com.example.sunnymarketbackend.entity.Users;
 import com.example.sunnymarketbackend.security.JwtUtil;
 import com.example.sunnymarketbackend.service.GoogleLoginService;
 import com.example.sunnymarketbackend.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -38,8 +39,10 @@ public class GoogleLoginController {
     }
 
     @PostMapping("/getGoogleCode")
-    public ResponseEntity<Map<String, Object>> googleLogin(@RequestBody GoogleLoginRequest googleLoginRequest) {
+    public ResponseEntity<Map<String, Object>> googleLogin(@RequestBody GoogleLoginRequest googleLoginRequest,
+                                                           HttpServletRequest request) {
         Users user = googleLoginService.googleLogin(googleLoginRequest.getCode());
+        userService.loginRecord(user.getUserId(), request );
         List<Role> role = userService.getRoleByUserId(user.getUserId());
         Map<String, Object> token = jwtUtil.generateToken(user.getUserId(), user.getEmail(), role.get(0).getRoleName());
         token.put("message", "登入成功");
