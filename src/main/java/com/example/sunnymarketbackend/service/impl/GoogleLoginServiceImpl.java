@@ -38,10 +38,10 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
     private RoleDao roleDao;
 
     @Value("${google.auth.url}")
-    private String GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
+    private String GOOGLE_AUTH_URL;
 
     @Value("${google.token.url}")
-    private String GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
+    private String GOOGLE_TOKEN_URL;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String clientId;
@@ -53,7 +53,7 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
     public Map<String, Object> buildAuthUrl() {
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
-                .fromHttpUrl(GOOGLE_AUTH_URL)
+                .fromUriString(GOOGLE_AUTH_URL)
                 .queryParam("response_type", "code")
                 .queryParam("client_id", clientId)
                 .queryParam("scope", "profile+email+openid")
@@ -71,6 +71,7 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
     public Users googleLogin(String code) {
         GoogleAccessTokenResponse googleAccessTokenResponse = getAccessToken(code);
         Users user = getGoogleUserByAccessToken(googleAccessTokenResponse);
+
         return user;
     }
 
@@ -107,7 +108,7 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
     }
 
     @Transactional
-    private Users getGoogleUserByAccessToken(GoogleAccessTokenResponse googleAccessTokenResponse) {
+    protected Users getGoogleUserByAccessToken(GoogleAccessTokenResponse googleAccessTokenResponse) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
