@@ -53,7 +53,7 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
     public Map<String, Object> buildAuthUrl() {
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
-                .fromHttpUrl(GOOGLE_AUTH_URL)
+                .fromUriString(GOOGLE_AUTH_URL)
                 .queryParam("response_type", "code")
                 .queryParam("client_id", clientId)
                 .queryParam("scope", "profile+email+openid")
