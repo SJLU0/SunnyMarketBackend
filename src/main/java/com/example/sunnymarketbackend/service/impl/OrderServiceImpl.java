@@ -105,13 +105,12 @@ public class OrderServiceImpl implements OrderService {
                 log.warn("Product stock is not enough: {}, {}", buyItem.getProductId(), product.getStock(),
                         buyItem.getQuantity());
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        String.format("商品庫存不足。庫存：%d",
-                                product.getStock()));
+                        String.format("商品名稱：%s 庫存不足，剩餘庫存：%d",
+                        product.getProductName(), product.getStock()));
             }
             // 扣除商品庫存
             productDao.updateStock(product.getProductId(), product.getStock() - buyItem.getQuantity(),
                     LocalDateTime.now());
-
             // 計算總價錢
             int amount = buyItem.getQuantity() * product.getPrice();
             totalAmount += amount;
