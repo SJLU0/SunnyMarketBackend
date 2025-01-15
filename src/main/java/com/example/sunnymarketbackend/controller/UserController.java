@@ -1,9 +1,6 @@
 package com.example.sunnymarketbackend.controller;
 
-import com.example.sunnymarketbackend.dto.ErrorMessage;
-import com.example.sunnymarketbackend.dto.UserLoginRequest;
-import com.example.sunnymarketbackend.dto.UserRegisterRequest;
-import com.example.sunnymarketbackend.dto.UserUpadteRequest;
+import com.example.sunnymarketbackend.dto.*;
 import com.example.sunnymarketbackend.entity.LoginRecord;
 import com.example.sunnymarketbackend.entity.Role;
 import com.example.sunnymarketbackend.entity.Users;
@@ -88,5 +85,11 @@ public class UserController {
         PageInfo<Users> userList = userService.getAllUsers(pageNum, pageSize, search);
         return ResponseEntity.status(HttpStatus.OK).body(userList);
 
+    }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+        userService.sendResetLink(resetPasswordRequest.getEmail());
+        return ResponseEntity.status(HttpStatus.OK).body("重置密碼連結已發送到您的電子郵件！");
     }
 }

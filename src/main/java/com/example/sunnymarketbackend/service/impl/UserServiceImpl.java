@@ -4,6 +4,7 @@ import com.example.sunnymarketbackend.dao.RoleDao;
 import com.example.sunnymarketbackend.dto.UserUpadteRequest;
 import com.example.sunnymarketbackend.entity.LoginRecord;
 import com.example.sunnymarketbackend.entity.Role;
+import com.example.sunnymarketbackend.security.MailUtil;
 import com.example.sunnymarketbackend.service.UserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -25,6 +26,7 @@ import ua_parser.Parser;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -39,6 +41,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private MailUtil mailUtil;
 
     @Override
     public List<Role> getRoleByUserId(Long userId) {
@@ -153,4 +158,36 @@ public class UserServiceImpl implements UserService {
         List<Users> userList = userDao.getAllUsers(search);
         return new  PageInfo<>(userList);
     }
+
+    @Override
+    public void sendResetLink(String email) {
+        // 確認用戶是否存在
+        Users user = userDao.getUserByEmail(email);
+        if (user == null) {
+            log.warn("該 email {} 尚未註冊", email);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        // 生成 token
+        String token = UUID.randomUUID().toString();
+        user.setResetToken(token);
+        user.setUserId(user.getUserId());
+        user.setResetTokenExpiration(LocalDateTime.now().plusMinutes(1)); //設定有效時間一小時
+        userDao.updateUser(user);
+
+        // 構建重置連結
+        String resetLink = "http://localhost:5173/ResetPassword/" + token;
+
+
+        // 發送郵件
+        String subject = "來自 Sunny Market 重置密碼請求";
+        String content = "<html><body>" +
+                "<p>你好，" + user.getUsername() + "：</p>" +
+                "<p>請點擊以下連結重置你的密碼：</p>" +
+                "<a href='" + resetLink + "'>重置密碼</a>" +
+                "<p>此連結將在 1 小時後失效。</p>" +
+                "</body></html>";
+
+        mailUtil.sendSimpleHtml(List.of(email), subject, content);
+    }
+
 }
