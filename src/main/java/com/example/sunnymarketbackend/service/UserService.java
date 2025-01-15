@@ -27,4 +27,6 @@ public interface UserService {
     List<Role> getRoleByUserId(Long userId);
 
     PageInfo<Users> getAllUsers(Integer pageNum, Integer pageSize, String search);
+
+    void sendResetLink(String email);
 }
