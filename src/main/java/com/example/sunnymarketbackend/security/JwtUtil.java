@@ -52,6 +52,20 @@ public class JwtUtil {
         return token;
     }
 
+    public String generateResetPasswordToken() {
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("resetPassword", true); // 標記為重設密碼的 token
+        String jwt = Jwts
+                .builder()
+                .setClaims(extraClaims) // 設定額外聲明
+                .setIssuedAt(new Date(System.currentTimeMillis())) // 簽發時間
+                .setExpiration(new Date(System.currentTimeMillis() + 15 * 60 * 1000)) // 設置 15 分鐘過期
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
+        return jwt;
+    }
+
+
     // 檢查 JWT 是否有效（即用戶名是否匹配且 token 是否過期）
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);  // 提取 JWT 中的用戶名

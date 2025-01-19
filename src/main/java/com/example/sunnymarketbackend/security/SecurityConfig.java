@@ -35,8 +35,12 @@ public class SecurityConfig {
                     cors.configurationSource(createCorsConfig()))
                 .authorizeHttpRequests(request -> request
                                 .anyRequest().permitAll()
-//                        .requestMatchers("/api/user/**", "/api/products/getAllProducts", "/api/products/{productId}").permitAll()
-//                        .requestMatchers("/orders/{userId}/createOrder", "/orders//{userId}/getAllOrders").hasAnyRole("USER", "ADMIN")
+//                        .requestMatchers("/api/user/**",
+//                                "/api/products/getAllProducts",
+//                                "/api/products/{productId}").permitAll()
+//                        .requestMatchers("/orders/{userId}/createOrder",
+//                                "/orders//{userId}/getAllOrders",
+//                                "/api/openAi/{userId}/chet").hasAnyRole("USER", "ADMIN")
 //                        .requestMatchers("/api/products/admin/*").hasRole("ADMIN")
 //                        .anyRequest().denyAll()
                 )

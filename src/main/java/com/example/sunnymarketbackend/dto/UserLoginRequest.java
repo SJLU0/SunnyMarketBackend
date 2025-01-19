@@ -12,6 +12,10 @@ public class UserLoginRequest {
     @NotBlank
     private String password;
 
+    private String token;
+
+    private String role;
+
     public @NotBlank @Email String getEmail() {
         return email;
     }
@@ -26,5 +30,21 @@ public class UserLoginRequest {
 
     public void setPassword(@NotBlank String password) {
         this.password = password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

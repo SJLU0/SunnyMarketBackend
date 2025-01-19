@@ -4,7 +4,8 @@
 
     <!-- 查詢所有產品並分頁 -->
     <select id="selectAllProducts" resultType="com.example.sunnymarketbackend.entity.Product">
-        SELECT product_id, product_name, category, image_Url, price, stock, description, created_date, last_modified_date
+        SELECT product_id, product_name, category, image_Url,
+               price, stock, description, created_date, last_modified_date
         FROM product_table
         <where>
             <!-- 類別篩選條件 -->
