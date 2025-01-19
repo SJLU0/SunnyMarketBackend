@@ -171,7 +171,5 @@ public class OrderServiceImpl implements OrderService {
             log.error("Failed to delete order item: {}", orderItemId, e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
-
 }

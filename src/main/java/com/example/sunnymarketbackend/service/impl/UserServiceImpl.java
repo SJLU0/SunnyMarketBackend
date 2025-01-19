@@ -4,6 +4,7 @@ import com.example.sunnymarketbackend.dao.RoleDao;
 import com.example.sunnymarketbackend.dto.UserUpadteRequest;
 import com.example.sunnymarketbackend.entity.LoginRecord;
 import com.example.sunnymarketbackend.entity.Role;
+import com.example.sunnymarketbackend.security.JwtUtil;
 import com.example.sunnymarketbackend.security.MailUtil;
 import com.example.sunnymarketbackend.service.UserService;
 import com.github.pagehelper.PageHelper;
@@ -44,6 +45,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private MailUtil mailUtil;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public List<Role> getRoleByUserId(Long userId) {
@@ -165,18 +169,16 @@ public class UserServiceImpl implements UserService {
         Users user = userDao.getUserByEmail(email);
         if (user == null) {
             log.warn("該 email {} 尚未註冊", email);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Email 尚未註冊");
         }
         // 生成 token
-        String token = UUID.randomUUID().toString();
+        String token = jwtUtil.generateResetPasswordToken();
         user.setResetToken(token);
-        user.setUserId(user.getUserId());
-        user.setResetTokenExpiration(LocalDateTime.now().plusMinutes(1)); //設定有效時間一小時
+        user.setResetTokenExpiration(LocalDateTime.now().plusMinutes(15)); //設定有效時間一小時
         userDao.updateUser(user);
 
         // 構建重置連結
         String resetLink = "http://localhost:5173/ResetPassword/" + token;
-
 
         // 發送郵件
         String subject = "來自 Sunny Market 重置密碼請求";
@@ -184,10 +186,9 @@ public class UserServiceImpl implements UserService {
                 "<p>你好，" + user.getUsername() + "：</p>" +
                 "<p>請點擊以下連結重置你的密碼：</p>" +
                 "<a href='" + resetLink + "'>重置密碼</a>" +
-                "<p>此連結將在 1 小時後失效。</p>" +
+                "<p>此連結將在 15 分鐘後失效，請盡快完成密碼重設。</p>" +
                 "</body></html>";
 
         mailUtil.sendSimpleHtml(List.of(email), subject, content);
     }
-
 }

@@ -81,10 +81,9 @@ public class UserController {
     @GetMapping("/getAllUsers")
     public ResponseEntity<PageInfo<Users>> getAllUsers(@RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "10") Integer pageSize,
-            @RequestParam(required = false) String search) { //required非必要輸入
+            @RequestParam(required = false) String search) {
         PageInfo<Users> userList = userService.getAllUsers(pageNum, pageSize, search);
         return ResponseEntity.status(HttpStatus.OK).body(userList);
-
     }
 
     @PostMapping("/resetPassword")
@@ -92,4 +91,10 @@ public class UserController {
         userService.sendResetLink(resetPasswordRequest.getEmail());
         return ResponseEntity.status(HttpStatus.OK).body("重置密碼連結已發送到您的電子郵件！");
     }
+
+//    @PostMapping("/CorrectPassword")
+//    public ResponseEntity<?> correctPassword(@RequestBody ResetPasswordRequest resetPasswordRequest){
+//
+//
+//    }
 }

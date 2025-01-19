@@ -76,12 +76,14 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
     }
 
     private GoogleAccessTokenResponse getAccessToken(String code) {
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate(); // 後端請求 HTTP 的工具類別
 
-        HttpHeaders headers = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders(); //設定 HTTP 標頭
+        // OAuth2 的 Token 請求需要 application/x-www-form-urlencoded 格式
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));//接收 json 格式
 
+        //準備請求的 Body
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", clientId);
